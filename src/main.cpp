@@ -17,6 +17,5 @@ void setup()
 
 void loop()
 {
-	// l.renderChar('0', 0);
-	l.renderChar('1', 5);
+	l.renderChar('5', 5);
 }

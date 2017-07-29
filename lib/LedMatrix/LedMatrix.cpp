@@ -96,6 +96,14 @@ void LedMatrix::renderChar(char c, int position)
 	switch (c) {
 	case '0': render(_0, position);	break;
 	case '1': render(_1, position); break;
+	case '2': render(_2, position); break;
+	case '3': render(_3, position); break;
+	case '4': render(_4, position); break;
+	case '5': render(_5, position); break;
+	case '6': render(_6, position); break;
+	case '7': render(_7, position); break;
+	case '8': render(_8, position); break;
+	case '9': render(_9, position); break;
 	default:
 		Serial.println("char not found");
 		break;
