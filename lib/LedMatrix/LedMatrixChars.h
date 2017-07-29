@@ -1,7 +1,9 @@
-#ifndef CHARS_H
-#define CHARS_H
+#ifndef LEDMATRIXCHARS_H
+#define LEDMATRIXCHARS_H
 
 namespace ledmatrix {
+	typedef unsigned char byte;
+
 	const static byte _0[8] = {
 		B01110,
 		B10001,
@@ -72,8 +74,8 @@ namespace ledmatrix {
 		B01110,
 		B10001,
 		B10000,
-		B10000,
 		B11110,
+		B10001,
 		B10001,
 		B10001,
 		B01110,
@@ -112,16 +114,16 @@ namespace ledmatrix {
 		B01110,
 	};
 
-	// const static byte _bolvanka[8] = {
-	// 	B00000,
-	// 	B00000,
-	// 	B00000,
-	// 	B00000,
-	// 	B00000,
-	// 	B00000,
-	// 	B00000,
-	// 	B00000,
-	// };
+	const static byte SPACE[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B00000,
+		B00000,
+		B00000,
+		B00000,
+		B00000,
+	};
 }
 
 

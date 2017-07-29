@@ -7,15 +7,15 @@
 #define OP_SHUTDOWN    12
 #define OP_DISPLAYTEST 15
 
-LedMatrix::LedMatrix(int din, int clk, int cs, int devices)
-	: DIN(din), CLK(clk), CS(cs), devices(devices)
+LedMatrix::LedMatrix(int din, int clk, int cs)
+	: DIN(din), CLK(clk), CS(cs)
 {
     pinMode(din, OUTPUT);
     pinMode(clk, OUTPUT);
     pinMode(cs, OUTPUT);
     digitalWrite(cs, HIGH);
 
-	for (int i = 0; i < devices; ++i) {
+	for (int i = 0; i < DEVICES; ++i) {
 	 	spiTransfer(i, OP_DISPLAYTEST, 0);
 	 	setScanLimit(i, 7);
 	 	spiTransfer(i, OP_DECODEMODE, 0);
@@ -28,7 +28,7 @@ void LedMatrix::spiTransfer(int device, byte opcode, byte data)
 {
     //Create an array with the data to shift out
     int offset = device * 2;
-    int maxbytes = devices * 2;
+    int maxbytes = DEVICES * 2;
     byte spidata[16];
 
     for(int i = 0; i < maxbytes; ++i) {
@@ -58,8 +58,8 @@ void LedMatrix::setScanLimit(int device, int limit)
 }
 
 void LedMatrix::setIntensity(int intensity) {
-	for (int i = 0; i < devices; ++i) {
-	 	setIntensity(i, 0);
+	for (int i = 0; i < DEVICES; ++i) {
+	 	setIntensity(i, intensity);
 	}
 }
 
@@ -78,14 +78,34 @@ void LedMatrix::clearDisplay(int device)
 void LedMatrix::render(const byte *rows, int position)
 {
 	for (int i = 0; i < 8; ++i) {
-		int value = rows[7 - i];
-		int flipped = 0;
+		int value = rows[i];
 
-		for (int i = 0; i < DOTS_PER_CHAR; ++i) {
-			flipped |= (value & 1) << (DOTS_PER_CHAR - 1 - i);
-			value >>= 1;
+		for (int j = 0; j < DOTS_PER_CHAR; ++j) {
+			state[i * LINE + j + position] = value & (1 << (DOTS_PER_CHAR - j - 1));
 		}
-		spiTransfer(0, i + 1, flipped);
+	}
+	int device = position / 8;
+	update(device);
+	if ((position + DOTS_PER_CHAR) / 8 != device) {
+		update(device + 1); // near section affected
+	}
+}
+
+void LedMatrix::turnLed(int position, int row, bool on)
+{
+	state[row * DEVICES * 8 + position] = on;
+	update(position / 8);
+}
+
+void LedMatrix::update(int device)
+{
+	for (int i = 0; i < 8; ++i) {
+		int val = 0;
+		for (int j = 0; j < 8; ++j) {
+			bool on = state[i * LINE + j + device * 8];
+			val |= on << j;
+		}
+		spiTransfer(device, 8 - i, val);
 	}
 }
 
@@ -104,6 +124,7 @@ void LedMatrix::renderChar(char c, int position)
 	case '7': render(_7, position); break;
 	case '8': render(_8, position); break;
 	case '9': render(_9, position); break;
+	case ' ': render(SPACE, position); break;
 	default:
 		Serial.println("char not found");
 		break;
