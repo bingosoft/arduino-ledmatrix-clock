@@ -25,6 +25,7 @@ public:
     void setIntensity(int device, int intensity);
     void setIntensity(int intensity);
     void clearDisplay(int device);
+    void clearDisplay();
 
 	void renderChar(char c, int position);
 	void turnLed(int position, int row, bool on);

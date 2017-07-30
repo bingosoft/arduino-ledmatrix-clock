@@ -27,16 +27,15 @@ LedMatrix::LedMatrix(int din, int clk, int cs)
 
 void LedMatrix::spiTransfer(int device, byte opcode, byte data)
 {
-    //Create an array with the data to shift out
     int offset = device * 2;
     int maxbytes = DEVICES * 2;
     byte spidata[16];
 
-    for(int i = 0; i < maxbytes; ++i) {
-		spidata[i]=(byte)0;
+    for (int i = 0; i < maxbytes; ++i) {
+		spidata[i] = 0;
 	}
-    //put our device data into the array
-    spidata[offset + 1]=opcode;
+
+    spidata[offset + 1] = opcode;
     spidata[offset] = data;
     //enable the line
     digitalWrite(CS, LOW);
@@ -58,7 +57,8 @@ void LedMatrix::setScanLimit(int device, int limit)
 	spiTransfer(device, OP_SCANLIMIT, limit);
 }
 
-void LedMatrix::setIntensity(int intensity) {
+void LedMatrix::setIntensity(int intensity)
+{
 	for (int i = 0; i < DEVICES; ++i) {
 	 	setIntensity(i, intensity);
 	}
@@ -69,10 +69,21 @@ void LedMatrix::setIntensity(int device, int intensity) // 0..15
 	spiTransfer(device, OP_INTENSITY, intensity);
 }
 
+void LedMatrix::clearDisplay()
+{
+    for (int i = 0; i < DEVICES; ++i) {
+		clearDisplay(i);
+    }
+}
+
 void LedMatrix::clearDisplay(int device)
 {
-    for(int i = 0; i < 8; i++) {
+    for (int i = 0; i < 8; i++) {
 		spiTransfer(device, i + 1, 0);
+
+		for (int j = 0; j < 8; ++j) {
+			state[i * LINE + device * 8 + j] = false;
+		}
     }
 }
 
@@ -87,6 +98,7 @@ void LedMatrix::render(const byte *rows, int position)
 	}
 	int device = position / 8;
 	update(device);
+
 	if ((position + DOTS_PER_CHAR) / 8 != device) {
 		update(device + 1); // near section affected
 	}
