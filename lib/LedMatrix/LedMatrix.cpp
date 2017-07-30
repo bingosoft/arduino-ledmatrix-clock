@@ -10,6 +10,7 @@
 LedMatrix::LedMatrix(int din, int clk, int cs)
 	: DIN(din), CLK(clk), CS(cs)
 {
+	Serial.printf("Setup led matrix on digital pins MOSI - %d, CLK - %d, CS - %d\n", din, clk, cs);
     pinMode(din, OUTPUT);
     pinMode(clk, OUTPUT);
     pinMode(cs, OUTPUT);
