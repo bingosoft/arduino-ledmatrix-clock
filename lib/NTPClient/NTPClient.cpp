@@ -1,165 +1,63 @@
-/*
-   This file is part of the NTPClient library.
-
-   Copyright 2016 - 2017 Sacha Telgenhof (stelgenhof@gmail.com). All rights reserved.
-
-   For the full copyright and license information, please view the LICENSE
-   file that was distributed with this source code.
- */
-
 #include "NTPClient.h"
+#include <ESP8266WiFi.h>
 
-#ifdef DEBUG_NTPCLIENT
-#define DEBUGLOG(...) os_printf(__VA_ARGS__)
-#else
-#define DEBUGLOG(...) Serial.printf(__VA_ARGS__)
-#endif
+void NTPClient::update()
+{
+	udp.begin(2390);
+	WiFi.hostByName(ntpServerName, timeServerIP);
+	Serial.println("resolved time host name " + timeServerIP.toString());
+	sendNTPpacket(timeServerIP); // send an NTP packet to a time server
+	// wait to see if a reply is available
+	delay(1000);
 
-NTPClient NTP;
+	int cb;
+	while (!(cb = udp.parsePacket())) {
+		Serial.println("no packet yet");
+		delay(300);
+	}
+	Serial.print("packet received, length=");
+	Serial.println(cb);
+	udp.read(packetBuffer, NTP_PACKET_SIZE); // read the packet into the buffer
 
-NTPClient::NTPClient() {
-  // Initialize class members
-  utc_offset = UTC;
-  last_poll = 0;
-  first_poll = 0;
+	//the timestamp starts at byte 40 of the received packet and is four bytes,
+	// or two words, long. First, esxtract the two words:
+
+	unsigned long highWord = word(packetBuffer[40], packetBuffer[41]);
+	unsigned long lowWord = word(packetBuffer[42], packetBuffer[43]);
+	// combine the four bytes (two words) into a long integer
+	// this is NTP time (seconds since Jan 1 1900):
+	unsigned long secsSince1900 = highWord << 16 | lowWord;
+
+	const unsigned long seventyYears = 2208988800UL;
+	unixTime = secsSince1900 - seventyYears;
+	// print Unix time:
+	unixTime += currentTimeZone * 60 * 60;
+	lastUpdated = millis();
+
+	// print the hour, minute and second:
+	Serial.printf("The current time is %02d:%02d:%02d\n", hours(), minutes(), seconds());
 }
 
-bool NTPClient::setNTPServer(const char *server, uint8_t idx) {
-  // Supports 3 SNTP servers at most (0 ~ 2)
-  if (idx > (NTP_SERVERS_MAXIMUM - 1)) {
-    return false;
-  }
-  sntp_stop();
-  sntp_setservername(idx, (char *)server);
-  DEBUGLOG("[NTP] NTP Server #%d set to: %s.\n", idx, server);
-  sntp_init();
+void NTPClient::sendNTPpacket(const IPAddress &address)
+{
+	Serial.println("sending NTP packet...");
+	// set all bytes in the buffer to 0
+	memset(packetBuffer, 0, NTP_PACKET_SIZE);
+	// Initialize values needed to form NTP request
+	// (see URL above for details on the packets)
+	packetBuffer[0] = 0b11100011;   // LI, Version, Mode
+	packetBuffer[1] = 0;     // Stratum, or type of clock
+	packetBuffer[2] = 6;     // Polling Interval
+	packetBuffer[3] = 0xEC;  // Peer Clock Precision
+	// 8 bytes of zero for Root Delay & Root Dispersion
+	packetBuffer[12]  = 49;
+	packetBuffer[13]  = 0x4E;
+	packetBuffer[14]  = 49;
+	packetBuffer[15]  = 52;
 
-  return true;
-}
-
-char *NTPClient::getNTPServer(uint8_t idx) {
-  // Supports 3 SNTP servers at most (0 ~ 2)
-  if (idx > (NTP_SERVERS_MAXIMUM - 1)) {
-    return {};
-  }
-
-  return sntp_getservername(idx);
-}
-
-bool NTPClient::init(const char *server, tz_utc_offsets_t utcOffset) {
-  if (!setNTPServer(server)) {
-    return false;
-  }
-
-  // Adjust for UTC Offset. Need to set timezone to 0 (UTC) since by default the
-  // timezone is set to UTC+0800
-  sntp_stop();
-  if (sntp_set_timezone(0)) {
-    sntp_init();
-    utc_offset = utcOffset;
-  }
-
-  last_poll = 0;
-
-  setPollingInterval(DEFAULT_POLLING_INTERVAL);
-  setSyncProvider(s_getTime);
-
-  DEBUGLOG("[NTP] Time synchronization started.\n");
-
-  if (onNTPSyncEvent != NULL) {
-    onNTPSyncEvent(NTP_EVENT_INIT);
-  }
-
-  return true;
-}
-
-bool NTPClient::stop() {
-  setSyncProvider(NULL);
-  sntp_stop();
-
-  DEBUGLOG("[NTP] Time synchronization stopped.\n");
-
-  if (onNTPSyncEvent != NULL) {
-    onNTPSyncEvent(NTP_EVENT_STOP);
-  }
-
-  return true;
-}
-
-void NTPClient::onSyncEvent(onSyncEvent_t cb) { onNTPSyncEvent = cb; }
-
-void NTPClient::setPollingInterval(unsigned int interval) {
-  // Don't do anything if new interval is not different from current
-  if (long_interval == interval) {
-    return;
-  }
-
-  long_interval =
-      (interval < NTP_MINIMUM_INTERVAL) ? NTP_MINIMUM_INTERVAL : interval;
-
-  if (timeStatus() != timeSet) {
-    setSyncInterval(NTP_SHORT_INTERVAL); // Get synchronized immediately
-  } else {
-    setSyncInterval(interval);
-  }
-  DEBUGLOG("[NTP] Polling interval set to: %d seconds.\n", long_interval);
-}
-
-unsigned int NTPClient::getPollingInterval() { return long_interval; }
-
-time_t NTPClient::getLastSync() { return last_poll; }
-
-time_t NTPClient::getFirstSync() { return first_poll; }
-
-const char *NTPClient::getTimeDate(time_t tm) {
-  char *dt = new char[20];
-  char buf[20];
-
-  snprintf(buf, sizeof(buf), "%d-%02d-%02dT%02d:%02d:%02d", year(tm), month(tm),
-           day(tm), hour(tm), minute(tm), second(tm));
-  strcpy(dt, buf);
-
-  return dt;
-}
-
-time_t NTPClient::s_getTime() { return NTP.getTime(); }
-
-time_t NTPClient::getTime() {
-  if (!WiFi.isConnected()) {
-    DEBUGLOG("[NTP] Error. WiFi not connected.\n");
-    return 0;
-  }
-
-  DEBUGLOG("[NTP] Requesting time from: %s.\n", sntp_getservername(0));
-  uint32_t timestamp = sntp_get_current_timestamp();
-
-  if (timestamp) {
-    setSyncInterval(NTP.getPollingInterval()); // Regular polling interval
-    timestamp += utc_offset;                   // Adjust time with UTC Offset
-
-    last_poll = timestamp;
-
-    if (0 == first_poll) {
-      first_poll = timestamp;
-      DEBUGLOG("[NTP] First synchronization: %s.\n",
-               getTimeDate(getFirstSync()));
-    }
-
-    if (onNTPSyncEvent != NULL) {
-      onNTPSyncEvent(NTP_EVENT_SYNCHRONIZED);
-    }
-
-    DEBUGLOG("[NTP] Time successfully synchronized to: %s.\n",
-             getTimeDate(getLastSync()));
-  } else {
-    // Received no response from the NTP Server
-    DEBUGLOG("[NTP] Error.\n");
-    if (onNTPSyncEvent != NULL) {
-      onNTPSyncEvent(NTP_EVENT_NO_RESPONSE);
-    }
-
-    setSyncInterval(NTP_SHORT_INTERVAL); // Get synchronized immediately
-  }
-
-  return timestamp;
+	// all NTP fields have been given values, now
+	// you can send a packet requesting a timestamp:
+	udp.beginPacket(address, 123); //NTP requests are to port 123
+	udp.write(packetBuffer, NTP_PACKET_SIZE);
+	udp.endPacket();
 }
