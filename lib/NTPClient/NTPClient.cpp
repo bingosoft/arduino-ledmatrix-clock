@@ -3,6 +3,7 @@
 
 void NTPClient::update()
 {
+	Serial.println("Waiting for NTP sync...");
 	udp.begin(2390);
 	WiFi.hostByName(ntpServerName, timeServerIP);
 	Serial.println("resolved time host name " + timeServerIP.toString());
@@ -11,9 +12,17 @@ void NTPClient::update()
 	delay(1000);
 
 	int cb;
+	int retries = 10;
 	while (!(cb = udp.parsePacket())) {
 		Serial.println("no packet yet");
 		delay(300);
+
+		if (retries == 0) {
+			Serial.println("No answer from remote NTP server!");
+			return;
+		}
+
+		retries--;
 	}
 	Serial.print("packet received, length=");
 	Serial.println(cb);

@@ -9,6 +9,8 @@ class Application
 {
 	const char* ssid = "network55";
 	const char* password = "eiS4aepheehi";
+	// const char* ssid = "bingosoft-wifi";
+	// const char* password = "159753bingo";
 
 	// GPIO digital pins
 	const int DATA_IN = 13;
@@ -19,6 +21,7 @@ class Application
 	NTPClient ntp;
 	bool dotVisible = false;
 
+	void connectToWiFi();
 	void updateTime();
 public:
 	Application();

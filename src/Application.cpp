@@ -6,10 +6,14 @@ Application::Application()
 	: l(DATA_IN, CLK, CS)
 {
 	Serial.println("Init app...");
- 	l.setIntensity(5);
+ 	l.setIntensity(0);
+	connectToWiFi();
+	ntp.update();
+}
 
+void Application::connectToWiFi()
+{
 	int i = 0;
-
 	WiFi.begin(ssid, password);
 
 	while (!WiFi.isConnected()) {
@@ -28,9 +32,6 @@ Application::Application()
 
 	Serial.printf("\nConnected to Wi-Fi - %s\n", WiFi.localIP().toString().c_str());
 	l.clearDisplay();
-	delay(1000);
-	Serial.println("Waiting for NTP sync...");
-	ntp.update();
 }
 
 void Application::updateTime()
@@ -57,5 +58,10 @@ void Application::exec()
 	if (ntp.hasTime()) {
 		updateTime();
 	}
+
+	if (ntp.secondsSinceLastUpdate() > 60) {
+		ntp.update();
+	}
+
 	delay(500);
 }

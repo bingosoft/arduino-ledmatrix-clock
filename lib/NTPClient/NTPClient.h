@@ -20,7 +20,8 @@ class NTPClient
 
 public:
 	void update();
-	unsigned long secondsSinceEpoch() const { return unixTime + (millis() - lastUpdated) / 1000; }
+	int secondsSinceLastUpdate() const { return (millis() - lastUpdated) / 1000; }
+	unsigned long secondsSinceEpoch() const { return unixTime + secondsSinceLastUpdate(); }
 	int seconds() const { return secondsSinceEpoch() % 60; }
 	int minutes() const { return (secondsSinceEpoch() / 60) % 60; }
 	int hours() const { return (secondsSinceEpoch() / 60 / 60) % 24; }
