@@ -9,6 +9,11 @@ Application::Application()
  	l.setIntensity(0);
 	connectToWiFi();
 	ntp.update();
+	w.getLocation();
+
+	if (w.locationReceived()) {
+		w.getWeather();
+	}
 }
 
 void Application::connectToWiFi()
@@ -57,10 +62,10 @@ void Application::exec()
 {
 	if (ntp.hasTime()) {
 		updateTime();
-	}
 
-	if (ntp.secondsSinceLastUpdate() > 60) {
-		ntp.update();
+		if (ntp.secondsSinceLastUpdate() > 60) {
+			ntp.update();
+		}
 	}
 
 	delay(500);

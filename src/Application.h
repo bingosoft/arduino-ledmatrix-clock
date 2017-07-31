@@ -4,6 +4,7 @@
 #include <LedMatrix.h>
 #include <Arduino.h>
 #include <NTPClient.h>
+#include "Weather.h"
 
 class Application
 {
@@ -17,6 +18,7 @@ class Application
 	const int CS = 15;
 	const int CLK = 14;
 
+	Weather w;
 	LedMatrix l;
 	NTPClient ntp;
 	bool dotVisible = false;
