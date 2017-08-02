@@ -29,7 +29,7 @@ void Weather::getLocation()
 	http.end();
 }
 
-void Weather::getWeather()
+void Weather::update()
 {
 	lastUpdate = millis();
 	Serial.println("Update weather for the current location");

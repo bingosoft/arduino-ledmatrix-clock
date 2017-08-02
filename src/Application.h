@@ -24,7 +24,9 @@ class Application
 	bool dotVisible = false;
 
 	void connectToWiFi();
-	void updateTime();
+	void displayTime();
+	void displayWeather();
+	void displayDescription();
 public:
 	Application();
 	void exec();

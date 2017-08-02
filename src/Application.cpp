@@ -12,7 +12,7 @@ Application::Application()
 	w.getLocation();
 
 	if (w.locationReceived()) {
-		w.getWeather();
+		w.update();
 	}
 }
 
@@ -39,13 +39,13 @@ void Application::connectToWiFi()
 	l.clearDisplay();
 }
 
-void Application::updateTime()
+void Application::displayTime()
 {
 	l.turnLed(16, 7, dotVisible);
 	l.turnLed(15, 7, dotVisible);
 	dotVisible = !dotVisible;
 
-	if (!dotVisible) {
+	if (dotVisible) {
 		int hours = ntp.hours();
 		int minutes = ntp.minutes();
 		int seconds = ntp.seconds();
@@ -53,18 +53,51 @@ void Application::updateTime()
 		l.renderChar(hours % 10 + 0x30, 9);
 		l.renderChar(minutes / 10 + 0x30, 18);
 		l.renderChar(minutes % 10 + 0x30, 25);
+		// char time[20];
+		// sprintf(time, "%02d%02d", hours, minutes);
+		// l.renderString(time, 2, 2);
 		Serial.printf("%02d:%02d:%02d\n", hours, minutes, seconds);
 	}
+}
+
+void Application::displayWeather()
+{
+	l.clearDisplay();
+	int t = w.temperature();
+	l.renderString((t > 0 ? "+" : t < 0 ? "-" : "") + String(t) + "\xB0", 5, 2);
+	delay(5000);
+	l.clearDisplay();
+}
+
+void Application::displayDescription()
+{
+	l.clearDisplay();
+	Serial.printf("description length %d", w.description().length());
+	l.renderFloatingText(w.description(), 5000, 100);
 }
 
 
 void Application::exec()
 {
 	if (ntp.hasTime()) {
-		updateTime();
+		int sec = ntp.seconds();
 
-		if (ntp.secondsSinceLastUpdate() > 60) {
+		if (sec == 20) {
+			displayWeather();
+		}
+
+		if (sec == 50) {
+			displayDescription();
+		}
+
+		displayTime();
+
+		if (ntp.secondsSinceLastUpdate() >= 600  && ntp.secondsSinceLastUpdate() % 600 == 0) {
 			ntp.update();
+		}
+
+		if (w.secondsSinceLastUpdate() % 600 == 0) {
+			w.update();
 		}
 	}
 

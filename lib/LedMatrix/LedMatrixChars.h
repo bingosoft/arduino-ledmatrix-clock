@@ -114,6 +114,28 @@ namespace ledmatrix {
 		B01110,
 	};
 
+	const static byte PLUS[8] = {
+		B00000,
+		B00000,
+		B00100,
+		B00100,
+		B11111,
+		B00100,
+		B00100,
+		B00000,
+	};
+
+	const static byte DEGREE[8] = {
+		B01000,
+		B10100,
+		B01000,
+		B00000,
+		B00000,
+		B00000,
+		B00000,
+		B00000,
+	};
+
 	const static byte SPACE[8] = {
 		B00000,
 		B00000,
@@ -123,6 +145,39 @@ namespace ledmatrix {
 		B00000,
 		B00000,
 		B00000,
+	};
+
+	const static byte A[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B11110,
+		B00001,
+		B01111,
+		B10001,
+		B01111,
+	};
+
+	const static byte P[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B11111,
+		B10001,
+		B10001,
+		B10001,
+		B10001,
+	};
+
+	const static byte S[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B01111,
+		B10000,
+		B10000,
+		B10000,
+		B01111,
 	};
 }
 

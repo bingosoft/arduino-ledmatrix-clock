@@ -14,6 +14,7 @@ class LedMatrix
 	static const int LINE = 8 * DEVICES;
 	bool state[DEVICES * 8 * 8] = {}; // each led state
 
+    void clearDisplay(int device);
     void shutdown(int device, bool status);
     void setScanLimit(int device, int limit);
 	void render(const byte *rows, int position);
@@ -24,10 +25,11 @@ public:
     void spiTransfer(int device, byte row, byte data);
     void setIntensity(int device, int intensity);
     void setIntensity(int intensity);
-    void clearDisplay(int device);
     void clearDisplay();
 
 	void renderChar(char c, int position);
+	void renderString(String s, int position, int space = 1);
+	void renderFloatingText(String s, int duration, int updateDelay);
 	void turnLed(int position, int row, bool on);
 };
 

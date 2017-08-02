@@ -14,9 +14,9 @@ class Weather
 public:
 	void getLocation();
 	bool locationReceived() const { return longitude.length() > 0; }
-	void getWeather();
+	void update();
 	int temperature() const { return t; }
-	const String & descirption() const { return descr; }
+	const String & description() const { return descr; }
 	int secondsSinceLastUpdate() const { return (millis() - lastUpdate) / 1000; }
 };
 

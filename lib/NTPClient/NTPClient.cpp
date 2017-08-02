@@ -42,7 +42,6 @@ void NTPClient::update()
 	// print Unix time:
 	unixTime += currentTimeZone * 60 * 60;
 	lastUpdated = millis();
-
 	// print the hour, minute and second:
 	Serial.printf("The current time is %02d:%02d:%02d\n", hours(), minutes(), seconds());
 }

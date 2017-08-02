@@ -93,6 +93,9 @@ void LedMatrix::render(const byte *rows, int position)
 		int value = rows[i];
 
 		for (int j = 0; j < DOTS_PER_CHAR; ++j) {
+			if (j + position > LINE)
+				continue;
+
 			state[i * LINE + j + position] = value & (1 << (DOTS_PER_CHAR - j - 1));
 		}
 	}
@@ -138,8 +141,43 @@ void LedMatrix::renderChar(char c, int position)
 	case '8': render(_8, position); break;
 	case '9': render(_9, position); break;
 	case ' ': render(SPACE, position); break;
+	case 0xD0: Serial.println("found1"); render(P, position); break;
+	case 'а': Serial.println("found2"); render(A, position); break;
+	case 'с': Serial.println("found3"); render(S, position); break;
+	case '+': render(PLUS, position); break;
+	case 0xB0: render(DEGREE, position); break;
 	default:
-		Serial.println("char not found");
+		Serial.println("char not found - " + String((uint8_t)c));
 		break;
+	}
+}
+
+void LedMatrix::renderString(String s, int position, int space)
+{
+	Serial.println(s);
+	for (int i = 0; i < s.length(); ++i) {
+		renderChar(s[i], position);
+		position += DOTS_PER_CHAR + space;
+
+		if (position > LINE) {
+			return;
+		}
+	}
+}
+
+void LedMatrix::renderFloatingText(String s, int duration, int updateDelay)
+{
+	renderString(s, 0);
+	delay(duration);
+	return;
+	int t = 0;
+	int wordLength = s.length() * (DOTS_PER_CHAR + 1) - 1;
+	int pos = 0;
+
+	while (t < duration) {
+		clearDisplay();
+		renderString(s, pos);
+		t += updateDelay;
+		delay(updateDelay);
 	}
 }
