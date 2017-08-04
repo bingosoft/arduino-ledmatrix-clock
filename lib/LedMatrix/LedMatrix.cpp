@@ -128,35 +128,47 @@ void LedMatrix::update(int device)
 void LedMatrix::renderChar(char c, int position)
 {
 	using namespace ledmatrix;
-
 	switch (c) {
-	case '0': render(_0, position);	break;
-	case '1': render(_1, position); break;
-	case '2': render(_2, position); break;
-	case '3': render(_3, position); break;
-	case '4': render(_4, position); break;
-	case '5': render(_5, position); break;
-	case '6': render(_6, position); break;
-	case '7': render(_7, position); break;
-	case '8': render(_8, position); break;
-	case '9': render(_9, position); break;
-	case ' ': render(SPACE, position); break;
-	case 0xD0: Serial.println("found1"); render(P, position); break;
-	case 'а': Serial.println("found2"); render(A, position); break;
-	case 'с': Serial.println("found3"); render(S, position); break;
-	case '+': render(PLUS, position); break;
-	case 0xB0: render(DEGREE, position); break;
-	default:
-		Serial.println("char not found - " + String((uint8_t)c));
-		break;
+		case '0': render(_0, position);	break;
+		case '1': render(_1, position); break;
+		case '2': render(_2, position); break;
+		case '3': render(_3, position); break;
+		case '4': render(_4, position); break;
+		case '5': render(_5, position); break;
+		case '6': render(_6, position); break;
+		case '7': render(_7, position); break;
+		case '8': render(_8, position); break;
+		case '9': render(_9, position); break;
+		case ' ': render(SPACE, position); break;
+		case '+': render(PLUS, position); break;
+		case 0xB0: render(DEGREE, position); break;
+		default:
+			Serial.println("char not found - " + String((uint8_t)c));
+			break;
+	}
+}
+
+void LedMatrix::renderChar(const char *c, int position)
+{
+	if (strlen(c) == 1) {
+		renderChar(c, position);
+	} else {
+		Serial.println("render 2-char symbol");
+		char c0 = c[0];
+		char c1 = c[1];
+		// case 'а': Serial.println("found2"); render(A, position); break;
+		// case 'с': Serial.println("found3"); render(S, position); break;
 	}
 }
 
 void LedMatrix::renderString(String s, int position, int space)
 {
 	Serial.println(s);
+	char c[2];
+	c[1] = 0;
 	for (int i = 0; i < s.length(); ++i) {
-		renderChar(s[i], position);
+		c[0] = s[i];
+		renderChar(c, position);
 		position += DOTS_PER_CHAR + space;
 
 		if (position > LINE) {
