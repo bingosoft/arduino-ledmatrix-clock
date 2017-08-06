@@ -1,5 +1,6 @@
 #include "LedMatrix.h"
 #include "LedMatrixChars.h"
+#include "utils.h"
 
 #define OP_DECODEMODE  9
 #define OP_INTENSITY   10
@@ -93,10 +94,11 @@ void LedMatrix::render(const byte *rows, int position)
 		int value = rows[i];
 
 		for (int j = 0; j < DOTS_PER_CHAR; ++j) {
-			if (j + position > LINE)
+			int pos = j + position;
+			if (pos > LINE || pos < 0)
 				continue;
 
-			state[i * LINE + j + position] = value & (1 << (DOTS_PER_CHAR - j - 1));
+			state[i * LINE + pos] = value & (1 << (DOTS_PER_CHAR - j - 1));
 		}
 	}
 	int device = position / 8;
@@ -141,36 +143,47 @@ void LedMatrix::renderChar(char c, int position)
 		case '9': render(_9, position); break;
 		case ' ': render(SPACE, position); break;
 		case '+': render(PLUS, position); break;
-		case 0xB0: render(DEGREE, position); break;
 		default:
-			Serial.println("char not found - " + String((uint8_t)c));
+			Serial.println("char not found - " + toHex(c));
 			break;
 	}
+
 }
 
-void LedMatrix::renderChar(const char *c, int position)
+void LedMatrix::renderUtf8Char(int c, int position)
 {
-	if (strlen(c) == 1) {
-		renderChar(c, position);
-	} else {
-		Serial.println("render 2-char symbol");
-		char c0 = c[0];
-		char c1 = c[1];
-		// case 'а': Serial.println("found2"); render(A, position); break;
-		// case 'с': Serial.println("found3"); render(S, position); break;
+	using namespace ledmatrix;
+	// Serial.println("Render utf-8 char " + toHex(c));
+
+	switch (c) {
+		case 'п': render(P, position); break;
+		case 'а': render(A, position); break;
+		case 'с': render(S, position); break;
+		case 'м': render(M, position); break;
+		case 'у': render(U, position); break;
+		case 'р': render(R, position); break;
+		case 'н': render(N, position); break;
+		case 'о': render(O, position); break;
+		case '°': render(DEGREE, position); break;
 	}
 }
 
 void LedMatrix::renderString(String s, int position, int space)
 {
-	Serial.println(s);
-	char c[2];
-	c[1] = 0;
-	for (int i = 0; i < s.length(); ++i) {
-		c[0] = s[i];
-		renderChar(c, position);
-		position += DOTS_PER_CHAR + space;
+	// Serial.println(s);
+	int utf8Char;
 
+	for (int i = 0; i < s.length(); ++i) {
+		int c = s[i];
+		if ((c & 0xE0) == 0xC0) { // 2 bytes
+			utf8Char = s[i] << 8 | s[i + 1];
+			++i;
+			renderUtf8Char(utf8Char, position);
+		} else {
+			renderChar(s[i], position);
+		}
+
+		position += DOTS_PER_CHAR + space;
 		if (position > LINE) {
 			return;
 		}
@@ -179,17 +192,24 @@ void LedMatrix::renderString(String s, int position, int space)
 
 void LedMatrix::renderFloatingText(String s, int duration, int updateDelay)
 {
-	renderString(s, 0);
-	delay(duration);
-	return;
-	int t = 0;
-	int wordLength = s.length() * (DOTS_PER_CHAR + 1) - 1;
-	int pos = 0;
+	int wordLength = (s.length() / 2) * (DOTS_PER_CHAR + 1) - 1;
 
-	while (t < duration) {
+	if (wordLength < 32) {
+		renderString(s, 0);
+		return;
+	}
+
+	int pos = 0;
+	int start = millis();
+
+	while ((millis() - start) < duration) {
 		clearDisplay();
 		renderString(s, pos);
-		t += updateDelay;
-		delay(updateDelay);
+		delay(pos == 0 ? 1000 : updateDelay);
+		pos--;
+		if (pos < (32 - wordLength)) {
+			pos = 0;
+			delay(1000);
+		}
 	}
 }

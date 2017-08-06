@@ -27,7 +27,7 @@ public:
     void setIntensity(int intensity);
     void clearDisplay();
 
-	void renderChar(const char *c, int position);
+	void renderUtf8Char(int c, int position);
 	void renderChar(char c, int position);
 	void renderString(String s, int position, int space = 1);
 	void renderFloatingText(String s, int duration, int updateDelay);
