@@ -156,14 +156,38 @@ void LedMatrix::renderUtf8Char(int c, int position)
 	// Serial.println("Render utf-8 char " + toHex(c));
 
 	switch (c) {
-		case 'п': render(P, position); break;
 		case 'а': render(A, position); break;
-		case 'с': render(S, position); break;
+		case 'б': render(B, position); break;
+		case 'в': render(V, position); break;
+		case 'г': render(G, position); break;
+		case 'д': render(D, position); break;
+		case 'е': render(E, position); break;
+		case 'ё': render(E, position); break;
+		case 'ж': render(ZH, position); break;
+		case 'з': render(Z, position); break;
+		case 'и': render(I, position); break;
+		case 'к': render(K, position); break;
+		case 'л': render(L, position); break;
 		case 'м': render(M, position); break;
-		case 'у': render(U, position); break;
-		case 'р': render(R, position); break;
 		case 'н': render(N, position); break;
 		case 'о': render(O, position); break;
+		case 'п': render(P, position); break;
+		case 'р': render(R, position); break;
+		case 'с': render(S, position); break;
+		case 'т': render(T, position); break;
+		case 'у': render(U, position); break;
+		case 'ф': render(F, position); break;
+		case 'х': render(H, position); break;
+		case 'ц': render(TS, position); break;
+		case 'ч': render(CH, position); break;
+		case 'ш': render(SH, position); break;
+		case 'щ': render(SCH, position); break;
+		case 'ъ': render(HARDSIGN, position); break;
+		case 'ы': render(YI, position); break;
+		case 'ь': render(SOFTSIGN, position); break;
+		case 'э': render(YE, position); break;
+		case 'ю': render(YU, position); break;
+		case 'я': render(YA, position); break;
 		case '°': render(DEGREE, position); break;
 	}
 }

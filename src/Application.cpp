@@ -66,8 +66,7 @@ void Application::displayWeather()
 void Application::displayDescription()
 {
 	l.clearDisplay();
-	Serial.printf("description length %d", w.description().length());
-	l.renderFloatingText(w.description(), 5000, 100);
+	l.renderFloatingText(w.description(), 5000, 50);
 	l.clearDisplay();
 }
 
