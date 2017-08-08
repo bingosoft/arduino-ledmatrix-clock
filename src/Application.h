@@ -4,6 +4,7 @@
 #include <LedMatrix.h>
 #include <Arduino.h>
 #include <NTPClient.h>
+#include <Timers.h>
 #include "Weather.h"
 
 class Application
@@ -21,12 +22,16 @@ class Application
 	Weather w;
 	LedMatrix l;
 	NTPClient ntp;
+	Timers<Application> t;
 	bool dotVisible = false;
 
 	void connectToWiFi();
 	void displayTime();
 	void displayWeather();
 	void displayDescription();
+
+	void updateWeather() { w.update(); }
+	void updateTime() { ntp.update(); }
 public:
 	Application();
 	void exec();

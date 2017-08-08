@@ -2,8 +2,9 @@
 #include <NTPClient.h>
 #include <ESP8266WiFi.h>
 
-Application::Application()
-	: l(DATA_IN, CLK, CS)
+Application::Application() :
+	l(DATA_IN, CLK, CS),
+	t()
 {
 	Serial.println("Init app...");
  	l.setIntensity(0);
@@ -14,6 +15,11 @@ Application::Application()
 	if (w.locationReceived()) {
 		w.update();
 	}
+
+	t.schedule(30000, &Application::displayWeather, this, 10000);
+	t.schedule(30000, &Application::displayDescription, this, 20000);
+	t.schedule(5 * 60000, &Application::updateWeather, this);
+	t.schedule(30 * 60000, &Application::updateTime, this);
 }
 
 void Application::connectToWiFi()
@@ -73,26 +79,8 @@ void Application::displayDescription()
 void Application::exec()
 {
 	if (ntp.hasTime()) {
-		int sec = ntp.seconds();
-
-		if (sec == 20) {
-			displayWeather();
-		}
-
-		if (sec == 50) {
-			displayDescription();
-		}
-
+		t.tick();
 		displayTime();
-
-		if (ntp.secondsSinceLastUpdate() >= 600  && ntp.secondsSinceLastUpdate() % 600 == 0) {
-			ntp.update();
-		}
-
-		if (w.secondsSinceLastUpdate() >= 600 && w.secondsSinceLastUpdate() % 600 == 0) {
-			w.update();
-		}
 	}
-
 	delay(500);
 }
