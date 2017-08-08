@@ -1,6 +1,5 @@
 #include "LedMatrix.h"
 #include "LedMatrixChars.h"
-#include "utils.h"
 
 #define OP_DECODEMODE  9
 #define OP_INTENSITY   10
@@ -144,7 +143,6 @@ void LedMatrix::renderChar(char c, int position)
 		case ' ': render(SPACE, position); break;
 		case '+': render(PLUS, position); break;
 		default:
-			Serial.println("char not found - " + toHex(c));
 			break;
 	}
 
@@ -153,7 +151,6 @@ void LedMatrix::renderChar(char c, int position)
 void LedMatrix::renderUtf8Char(int c, int position)
 {
 	using namespace ledmatrix;
-	// Serial.println("Render utf-8 char " + toHex(c));
 
 	switch (c) {
 		case 'а': render(A, position); break;
@@ -194,7 +191,6 @@ void LedMatrix::renderUtf8Char(int c, int position)
 
 void LedMatrix::renderString(String s, int position, int space)
 {
-	// Serial.println(s);
 	int utf8Char;
 
 	for (int i = 0; i < s.length(); ++i) {
