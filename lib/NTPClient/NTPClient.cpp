@@ -5,9 +5,11 @@ void NTPClient::update()
 {
 	Serial.println("Waiting for NTP sync...");
 	udp.begin(2390);
-	WiFi.hostByName(ntpServerName, timeServerIP);
-	Serial.println("resolved time host name " + timeServerIP.toString());
-	sendNTPpacket(timeServerIP); // send an NTP packet to a time server
+	if (ip.toString() == "0.0.0.0") {
+		WiFi.hostByName(ntpServerName, ip);
+		Serial.println("resolved time host name " + ip.toString());
+	}
+	sendNTPpacket(ip); // send an NTP packet to a time server
 	// wait to see if a reply is available
 	delay(1000);
 
@@ -44,6 +46,7 @@ void NTPClient::update()
 	lastUpdated = millis();
 	// print the hour, minute and second:
 	Serial.printf("The current time is %02d:%02d:%02d\n", hours(), minutes(), seconds());
+	udp.stop();
 }
 
 void NTPClient::sendNTPpacket(const IPAddress &address)

@@ -11,7 +11,7 @@ class NTPClient
 	const int currentTimeZone = 3; // UTC+3
 
 	WiFiUDP udp;
-	IPAddress timeServerIP;
+	IPAddress ip;
 	byte packetBuffer[NTP_PACKET_SIZE];
 
 	unsigned long unixTime = 0;
