@@ -18,8 +18,6 @@ struct TimerInfo : ITimerInfo
 	int interval;
 	unsigned long elapsed;
 
-	TimerInfo() { }
-
 	TimerInfo(int interval, T *object, Handler handler, int delay)	:
 		interval(interval),
 		elapsed(millis()),
@@ -35,10 +33,7 @@ struct TimerInfo : ITimerInfo
 	{
 		if ((time - elapsed) > interval) {
 			elapsed += interval;
-
-			if (object != 0) {
-				(object->*handler)();
-			}
+			(object->*handler)();
 		}
 	}
 };
@@ -47,7 +42,7 @@ template <unsigned MAX_TIMERS>
 class Timers
 {
 	int count = 0;
-	ITimerInfo* timers[MAX_TIMERS];
+	ITimerInfo* timers[MAX_TIMERS]; // avoid relocations on append
 
 public:
 	template <class T>
