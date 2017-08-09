@@ -215,7 +215,8 @@ void LedMatrix::renderFloatingText(String s, int duration, int updateDelay)
 	int wordLength = (s.length() / 2) * (DOTS_PER_CHAR + 1) - 1;
 
 	if (wordLength < 32) {
-		renderString(s, 0);
+		renderString(s, (32 - wordLength) / 2 + 1);
+		delay(duration);
 		return;
 	}
 
