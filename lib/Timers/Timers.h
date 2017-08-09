@@ -3,58 +3,66 @@
 
 #include <Arduino.h>
 
-template <class T>
-struct TimerInfo
+struct ITimerInfo
 {
-	typedef void (T::*TimerFunc)();
+	virtual void check(unsigned long time) = 0;
+};
+
+template <class T>
+struct TimerInfo : ITimerInfo
+{
+	typedef void (T::*Handler)();
+
+	T *object;
+	Handler handler;
 	int interval;
 	unsigned long elapsed;
-	TimerFunc handler;
-	T *object;
 
 	TimerInfo() { }
 
-	TimerInfo(int interval, TimerFunc handler, T *object, int delay)	:
+	TimerInfo(int interval, T *object, Handler handler, int delay)	:
 		interval(interval),
 		elapsed(millis()),
-		handler(handler),
-		object(object)
+		object(object),
+		handler(handler)
 	{
 		if (delay > 0) {
 			elapsed -= interval - delay;
 		}
 	}
+
+	void check(unsigned long time) override
+	{
+		if ((time - elapsed) > interval) {
+			elapsed += interval;
+
+			if (object != 0) {
+				(object->*handler)();
+			}
+		}
+	}
 };
 
-template <class T>
+template <unsigned MAX_TIMERS>
 class Timers
 {
-	typedef typename TimerInfo<T>::TimerFunc TimerFunc;
 	int count = 0;
-	TimerInfo<T> timers[10];
+	ITimerInfo* timers[MAX_TIMERS];
 
 public:
-	Timers() { }
-
-	void schedule(int interval, TimerFunc handler, T *object,  int delay = 0)
+	template <class T>
+	void schedule(int interval, T *object, typename TimerInfo<T>::Handler handler, int delay = 0)
 	{
-		timers[count] = TimerInfo<T>(interval, handler, object, delay);
+		timers[count] = new TimerInfo<T>(interval, object, handler, delay);
 		count++;
 	}
 
 	void tick()
 	{
 		unsigned long time = millis();
+
 		for (int i = 0; i < count; ++i) {
-			TimerInfo<T> &t = timers[i];
-
-			if ((time - t.elapsed) > t.interval) {
-				t.elapsed += t.interval;
-
-				if (t.object != 0) {
-					(t.object->*t.handler)();
-				}
-			}
+			timers[i]->check(time);
 		}
 	}
 };

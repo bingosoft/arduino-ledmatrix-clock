@@ -22,7 +22,7 @@ class Application
 	Weather w;
 	LedMatrix l;
 	NTPClient ntp;
-	Timers<Application> t;
+	Timers<4> t;
 	bool dotVisible = false;
 
 	void connectToWiFi();

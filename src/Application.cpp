@@ -3,23 +3,20 @@
 #include <ESP8266WiFi.h>
 
 Application::Application() :
-	l(DATA_IN, CLK, CS),
-	t()
+	l(DATA_IN, CLK, CS)
 {
 	Serial.println("Init app...");
  	l.setIntensity(0);
 	connectToWiFi();
+
 	ntp.update();
 	w.getLocation();
+	w.update();
 
-	if (w.locationReceived()) {
-		w.update();
-	}
-
-	t.schedule(30000, &Application::displayWeather, this, 10000);
-	t.schedule(30000, &Application::displayDescription, this, 20000);
-	t.schedule(5 * 60000, &Application::updateWeather, this);
-	t.schedule(30 * 60000, &Application::updateTime, this);
+	t.schedule(30000, this, &Application::displayWeather, 10000);
+	t.schedule(30000, this, &Application::displayDescription, 20000);
+	t.schedule(5 * 60000, &w, &Weather::update);
+	t.schedule(30 * 60000, &ntp, &NTPClient::update);
 }
 
 void Application::connectToWiFi()
