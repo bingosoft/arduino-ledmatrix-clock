@@ -142,6 +142,7 @@ void LedMatrix::renderChar(char c, int position)
 		case '9': render(_9, position); break;
 		case ' ': render(SPACE, position); break;
 		case '+': render(PLUS, position); break;
+		case '-': render(MINUS, position); break;
 		default:
 			break;
 	}
