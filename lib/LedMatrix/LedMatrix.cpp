@@ -16,7 +16,7 @@ LedMatrix::LedMatrix(int din, int clk, int cs)
     pinMode(cs, OUTPUT);
     digitalWrite(cs, HIGH);
 
-	for (int i = 0; i < DEVICES; ++i) {
+	for (int i = 0; i < SECTIONS; ++i) {
 	 	spiTransfer(i, OP_DISPLAYTEST, 0);
 	 	setScanLimit(i, 7);
 	 	spiTransfer(i, OP_DECODEMODE, 0);
@@ -28,7 +28,7 @@ LedMatrix::LedMatrix(int din, int clk, int cs)
 void LedMatrix::spiTransfer(int device, byte opcode, byte data)
 {
     int offset = device * 2;
-    int maxbytes = DEVICES * 2;
+    int maxbytes = SECTIONS * 2;
     byte spidata[16];
 
     for (int i = 0; i < maxbytes; ++i) {
@@ -59,7 +59,7 @@ void LedMatrix::setScanLimit(int device, int limit)
 
 void LedMatrix::setIntensity(int intensity)
 {
-	for (int i = 0; i < DEVICES; ++i) {
+	for (int i = 0; i < SECTIONS; ++i) {
 	 	setIntensity(i, intensity);
 	}
 }
@@ -71,7 +71,7 @@ void LedMatrix::setIntensity(int device, int intensity) // 0..15
 
 void LedMatrix::clearDisplay()
 {
-    for (int i = 0; i < DEVICES; ++i) {
+    for (int i = 0; i < SECTIONS; ++i) {
 		clearDisplay(i);
     }
 }
@@ -110,7 +110,7 @@ void LedMatrix::render(const byte *rows, int position)
 
 void LedMatrix::turnLed(int position, int row, bool on)
 {
-	state[row * DEVICES * 8 + position] = on;
+	state[row * SECTIONS * 8 + position] = on;
 	update(position / 8);
 }
 
@@ -191,7 +191,22 @@ void LedMatrix::renderUtf8Char(int c, int position)
 	}
 }
 
-void LedMatrix::renderString(String s, int position, int space)
+int LedMatrix::utf8len(const String &s) const
+{
+	int length = 0;
+
+	for (int i = 0; i < s.length(); ++i) {
+		if ((s[i] & 0xE0) == 0xC0) { // 2 bytes
+			++i;
+		} else {
+			length++;
+		}
+	}
+
+	return length;
+}
+
+void LedMatrix::renderString(const String &s, int position, int space)
 {
 	int utf8Char;
 
@@ -212,9 +227,9 @@ void LedMatrix::renderString(String s, int position, int space)
 	}
 }
 
-void LedMatrix::renderFloatingText(String s, int duration, int updateDelay)
+void LedMatrix::renderFloatingText(const String &s, int duration, int updateDelay)
 {
-	int wordLength = (s.length() / 2) * (DOTS_PER_CHAR + 1) - 1;
+	int wordLength = utf8len(s) * (DOTS_PER_CHAR + 1) - 1;
 
 	if (wordLength < 32) {
 		renderString(s, (32 - wordLength) / 2 + 1);
