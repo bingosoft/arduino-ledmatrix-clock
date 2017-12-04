@@ -198,9 +198,8 @@ int LedMatrix::utf8len(const String &s) const
 	for (int i = 0; i < s.length(); ++i) {
 		if ((s[i] & 0xE0) == 0xC0) { // 2 bytes
 			++i;
-		} else {
-			length++;
 		}
+		length++;
 	}
 
 	return length;

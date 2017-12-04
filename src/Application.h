@@ -22,12 +22,13 @@ class Application
 	Weather w;
 	LedMatrix l;
 	NTPClient ntp;
-	Timers<4> t;
+	Timers<5> t;
 	bool dotVisible = false;
 
 	void connectToWiFi();
 	void displayTime();
 	void displayWeather();
+	void displayCity();
 	void displayDescription();
 
 	void updateWeather() { w.update(); }

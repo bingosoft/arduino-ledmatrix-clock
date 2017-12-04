@@ -15,6 +15,7 @@ Application::Application() :
 
 	t.schedule(30000, this, &Application::displayWeather, 10000);
 	t.schedule(30000, this, &Application::displayDescription, 20000);
+	t.schedule(1000000, this, &Application::displayCity, 30000);
 	t.schedule(5 * 60000, &w, &Weather::update);
 	t.schedule(30 * 60000, &ntp, &NTPClient::update);
 }
@@ -62,6 +63,14 @@ void Application::displayWeather()
 	l.clearDisplay();
 	int t = w.temperature();
 	l.renderString((t > 0 ? "+" : t < 0 ? "-" : "") + String(t) + "°", 5, 2);
+	delay(5000);
+	l.clearDisplay();
+}
+
+void Application::displayCity()
+{
+	l.clearDisplay();
+	l.renderString(w.city(), 5, 2);
 	delay(5000);
 	l.clearDisplay();
 }

@@ -24,6 +24,7 @@ void Weather::getLocation()
 		double lon = root["longitude"];
 		dtostrf(lon, 0, 4, s);
 		longitude = String(s);
+		_city = (const char *)root["city"];
 		Serial.println("Location by IP received - " + latitude + " " + longitude);
 	}
 	http.end();
@@ -46,10 +47,10 @@ void Weather::update()
 		DynamicJsonBuffer jsonBuffer(BUFFER_SIZE);
 		JsonObject& root = jsonBuffer.parseObject(response);
 		float t = root["main"]["temp"];
-		temp = t - 273.15;
+		_temperature = t - 273.15;
 		Serial.printf("Current temperature %d\n", t);
-		descr = (const char *)root["weather"][0]["description"];
-		Serial.println("Weather description - " + descr);
+	 	_description = (const char *)root["weather"][0]["description"];
+		Serial.println("Weather description - " + _description);
 	}
 	http.end();
 }
