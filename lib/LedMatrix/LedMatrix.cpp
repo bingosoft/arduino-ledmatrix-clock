@@ -164,6 +164,7 @@ void LedMatrix::renderUtf8Char(int c, int position)
 		case 'ж': render(ZH, position); break;
 		case 'з': render(Z, position); break;
 		case 'и': render(I, position); break;
+		case 'й': render(Y, position); break;
 		case 'к': render(K, position); break;
 		case 'л': render(L, position); break;
 		case 'м': render(M, position); break;
