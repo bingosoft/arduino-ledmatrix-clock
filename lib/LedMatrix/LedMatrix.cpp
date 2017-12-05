@@ -143,6 +143,13 @@ void LedMatrix::renderChar(char c, int position)
 		case ' ': render(SPACE, position); break;
 		case '+': render(PLUS, position); break;
 		case '-': render(MINUS, position); break;
+		case 'a': render(A, position); break;
+		case 'c': render(C, position); break;
+		case 'e': render(E, position); break;
+		case 'o': render(O, position); break;
+		case 'p': render(R, position); break;
+		case 'x': render(X, position); break;
+		case 'у': render(Y, position); break;
 		default:
 			break;
 	}
@@ -164,7 +171,7 @@ void LedMatrix::renderUtf8Char(int c, int position)
 		case 'ж': render(ZH, position); break;
 		case 'з': render(Z, position); break;
 		case 'и': render(I, position); break;
-		case 'й': render(Y, position); break;
+		case 'й': render(IY, position); break;
 		case 'к': render(K, position); break;
 		case 'л': render(L, position); break;
 		case 'м': render(M, position); break;
@@ -172,11 +179,11 @@ void LedMatrix::renderUtf8Char(int c, int position)
 		case 'о': render(O, position); break;
 		case 'п': render(P, position); break;
 		case 'р': render(R, position); break;
-		case 'с': render(S, position); break;
+		case 'с': render(C, position); break;
 		case 'т': render(T, position); break;
-		case 'у': render(U, position); break;
+		case 'у': render(Y, position); break;
 		case 'ф': render(F, position); break;
-		case 'х': render(H, position); break;
+		case 'х': render(X, position); break;
 		case 'ц': render(TS, position); break;
 		case 'ч': render(CH, position); break;
 		case 'ш': render(SH, position); break;
@@ -197,7 +204,11 @@ int LedMatrix::utf8len(const String &s) const
 
 	for (int i = 0; i < s.length(); ++i) {
 		if ((s[i] & 0xE0) == 0xC0) { // 2 bytes
-			++i;
+			i += 1;
+		} else if ((s[i] & 0xF0) == 0xE0) { // 3 bytes
+			i += 2;
+		} else if ((s[i] & 0XF8) == 0XF0) { // 4 bytes
+			i += 3;
 		}
 		length++;
 	}

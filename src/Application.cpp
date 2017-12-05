@@ -62,7 +62,7 @@ void Application::displayWeather()
 {
 	l.clearDisplay();
 	int t = w.temperature();
-	l.renderString((t > 0 ? "+" : t < 0 ? "-" : "") + String(t) + "°", 5, 2);
+	l.renderString((t > 0 ? "+" : "") + String(t) + "°", 5, 2);
 	delay(5000);
 	l.clearDisplay();
 }
