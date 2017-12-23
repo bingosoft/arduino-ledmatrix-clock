@@ -7,6 +7,7 @@ Application::Application() :
 {
 	Serial.println("Init app...");
  	l.setIntensity(0);
+	// l.renderFloatingText("абвгдеёжзиклмнопрстуфхцчшщьыъэюя", 50000000, 300);
 	connectToWiFi();
 
 	ntp.update();
