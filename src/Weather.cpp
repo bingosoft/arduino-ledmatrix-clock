@@ -25,6 +25,7 @@ void Weather::getLocation()
 		dtostrf(lon, 0, 4, s);
 		longitude = String(s);
 		_city = (const char *)root["city"];
+		_city.toLowerCase();
 		Serial.println("Location by IP received - " + latitude + " " + longitude);
 	}
 	http.end();

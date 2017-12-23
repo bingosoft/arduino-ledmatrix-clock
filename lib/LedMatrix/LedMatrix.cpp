@@ -87,17 +87,17 @@ void LedMatrix::clearDisplay(int device)
     }
 }
 
-void LedMatrix::render(const byte *rows, int position)
+void LedMatrix::render(const byte *rows, int position, int charWidth)
 {
 	for (int i = 0; i < 8; ++i) {
 		int value = rows[i];
 
-		for (int j = 0; j < DOTS_PER_CHAR; ++j) {
+		for (int j = 0; j < charWidth; ++j) {
 			int pos = j + position;
 			if (pos > LINE || pos < 0)
 				continue;
 
-			state[i * LINE + pos] = value & (1 << (DOTS_PER_CHAR - j - 1));
+			state[i * LINE + pos] = value & (1 << (charWidth - j - 1));
 		}
 	}
 	int device = position / 8;
@@ -126,8 +126,9 @@ void LedMatrix::update(int device)
 	}
 }
 
-void LedMatrix::renderChar(char c, int position)
+int LedMatrix::renderChar(char c, int position)
 {
+	int charWidth = DOTS_PER_CHAR;
 	using namespace ledmatrix;
 	switch (c) {
 		case '0': render(_0, position);	break;
@@ -144,16 +145,35 @@ void LedMatrix::renderChar(char c, int position)
 		case '+': render(PLUS, position); break;
 		case '-': render(MINUS, position); break;
 		case 'a': render(A, position); break;
+		case 'b': render(B, position); break;
 		case 'c': render(C, position); break;
+		case 'd': render(D, position); break;
 		case 'e': render(E, position); break;
+		case 'f': render(F, position); break;
+		case 'g': render(G, position); break;
+		case 'h': render(H, position); break;
+		case 'i': charWidth = 1; render(I, position, charWidth); break;
+		case 'j': render(J, position); break;
+		case 'k': render(K, position); break;
+		case 'l': render(L, position); break;
+		case 'm': render(M, position); break;
+		case 'n': render(N, position); break;
 		case 'o': render(O, position); break;
-		case 'p': render(R, position); break;
+		case 'p': render(P, position); break;
+		case 'q': render(Q, position); break;
+		case 'r': render(R, position); break;
+		case 's': render(S, position); break;
+		case 't': render(T, position); break;
+		case 'u': render(U, position); break;
+		case 'v': render(V, position); break;
+		case 'w': render(W, position); break;
 		case 'x': render(X, position); break;
-		case 'у': render(Y, position); break;
+		case 'y': render(Y, position); break;
+		case 'z': render(Z, position); break;
 		default:
 			break;
 	}
-
+	return charWidth;
 }
 
 void LedMatrix::renderUtf8Char(int c, int position)
@@ -162,27 +182,27 @@ void LedMatrix::renderUtf8Char(int c, int position)
 
 	switch (c) {
 		case 'а': render(A, position); break;
-		case 'б': render(B, position); break;
-		case 'в': render(V, position); break;
+		case 'б': render(RUS_B, position); break;
+		case 'в': render(RUS_V, position); break;
 		case 'г': render(G, position); break;
-		case 'д': render(D, position); break;
+		case 'д': render(RUS_D, position); break;
 		case 'е': render(E, position); break;
 		case 'ё': render(E, position); break;
 		case 'ж': render(ZH, position); break;
-		case 'з': render(Z, position); break;
-		case 'и': render(I, position); break;
+		case 'з': render(RUS_Z, position); break;
+		case 'и': render(RUS_I, position); break;
 		case 'й': render(IY, position); break;
-		case 'к': render(K, position); break;
-		case 'л': render(L, position); break;
-		case 'м': render(M, position); break;
-		case 'н': render(N, position); break;
+		case 'к': render(RUS_K, position); break;
+		case 'л': render(RUS_L, position); break;
+		case 'м': render(RUS_M, position); break;
+		case 'н': render(RUS_N, position); break;
 		case 'о': render(O, position); break;
-		case 'п': render(P, position); break;
-		case 'р': render(R, position); break;
+		case 'п': render(RUS_P, position); break;
+		case 'р': render(P, position); break;
 		case 'с': render(C, position); break;
-		case 'т': render(T, position); break;
+		case 'т': render(RUS_T, position); break;
 		case 'у': render(Y, position); break;
-		case 'ф': render(F, position); break;
+		case 'ф': render(RUS_F, position); break;
 		case 'х': render(X, position); break;
 		case 'ц': render(TS, position); break;
 		case 'ч': render(CH, position); break;
@@ -222,19 +242,29 @@ void LedMatrix::renderString(const String &s, int position, int space)
 
 	for (int i = 0; i < s.length(); ++i) {
 		int c = s[i];
+		int charWidth = DOTS_PER_CHAR;
+
 		if ((c & 0xE0) == 0xC0) { // 2 bytes
 			utf8Char = s[i] << 8 | s[i + 1];
 			++i;
 			renderUtf8Char(utf8Char, position);
 		} else {
-			renderChar(s[i], position);
+			charWidth = renderChar(s[i], position);
 		}
 
-		position += DOTS_PER_CHAR + space;
+		position += charWidth + space;
 		if (position > LINE) {
 			return;
 		}
 	}
+}
+
+void LedMatrix::renderStringInCenter(const String &s, int duration)
+{
+	int wordLength = min(utf8len(s) * (DOTS_PER_CHAR + 1) - 1, 32);
+
+	renderString(s, (32 - wordLength) / 2 + 1);
+	delay(duration);
 }
 
 void LedMatrix::renderFloatingText(const String &s, int duration, int updateDelay)

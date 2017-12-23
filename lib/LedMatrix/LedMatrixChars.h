@@ -125,7 +125,18 @@ namespace ledmatrix {
 		B01111,
 	};
 
-	const static byte P[8] = {
+	const static byte B[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B10000,
+		B10000,
+		B11110,
+		B10001,
+		B11110,
+	};
+
+	const static byte RUS_P[8] = {
 		B00000,
 		B00000,
 		B00000,
@@ -147,15 +158,213 @@ namespace ledmatrix {
 		B01111,
 	};
 
+	const static byte D[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B00001,
+		B00001,
+		B01111,
+		B10001,
+		B01111,
+	};
+
+	const static byte F[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B00110,
+		B01001,
+		B11100,
+		B01000,
+		B01000,
+	};
+
+	const static byte G[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B01101,
+		B10011,
+		B01101,
+		B00001,
+		B01110,
+	};
+
+	const static byte H[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B10000,
+		B10000,
+		B11110,
+		B10001,
+		B10001,
+	};
+
+	const static byte I[8] = {
+		B0,
+		B0,
+		B0,
+		B1,
+		B0,
+		B1,
+		B1,
+		B1,
+	};
+
+	const static byte J[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B00010,
+		B00000,
+		B00010,
+		B01010,
+		B00100,
+	};
+
+	const static byte K[8] = {
+		B00000,
+		B00000,
+		B10000,
+		B10010,
+		B10100,
+		B11000,
+		B10100,
+		B10010,
+	};
+
+	const static byte L[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B11000,
+		B01000,
+		B01000,
+		B01010,
+		B00100,
+	};
+
 	const static byte M[8] = {
 		B00000,
 		B00000,
 		B00000,
-		B10001,
-		B11011,
+		B11010,
 		B10101,
+		B10101,
+		B10101,
+		B10101,
+	};
+
+	const static byte N[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B10110,
+		B11001,
 		B10001,
 		B10001,
+		B10001,
+	};
+
+	const static byte Q[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B01101,
+		B10011,
+		B10011,
+		B01101,
+		B00001,
+	};
+
+	const static byte R[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B10110,
+		B11001,
+		B10000,
+		B10000,
+		B10000,
+	};
+
+	const static byte S[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B01111,
+		B10000,
+		B01110,
+		B00001,
+		B11110,
+	};
+
+	const static byte T[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B01000,
+		B11100,
+		B01000,
+		B01001,
+		B00110,
+	};
+
+	const static byte U[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B10001,
+		B10001,
+		B10001,
+		B10001,
+		B01110,
+	};
+
+	const static byte V[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B10001,
+		B10001,
+		B01010,
+		B01010,
+		B00100,
+	};
+
+	const static byte W[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B10001,
+		B10101,
+		B10101,
+		B10101,
+		B01010,
+	};
+
+	const static byte Z[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B11111,
+		B00010,
+		B00100,
+		B01000,
+		B11111,
+	};
+
+	const static byte BOLV[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B00000,
+		B00000,
+		B00000,
+		B00000,
+		B00000,
 	};
 
 	const static byte Y[8] = {
@@ -169,7 +378,7 @@ namespace ledmatrix {
 		B11110,
 	};
 
-	const static byte R[8] = {
+	const static byte P[8] = {
 		B00000,
 		B00000,
 		B00000,
@@ -180,7 +389,7 @@ namespace ledmatrix {
 		B10000,
 	};
 
-	const static byte N[8] = {
+	const static byte RUS_N[8] = {
 		B00000,
 		B00000,
 		B00000,
@@ -202,7 +411,7 @@ namespace ledmatrix {
 		B01110,
 	};
 
-	const static byte B[8] = {
+	const static byte RUS_B[8] = {
 		B00000,
 		B00000,
 		B00000,
@@ -213,7 +422,7 @@ namespace ledmatrix {
 		B11110,
 	};
 
-	const static byte V[8] = {
+	const static byte RUS_V[8] = {
 		B00000,
 		B00000,
 		B00000,
@@ -224,7 +433,7 @@ namespace ledmatrix {
 		B11110,
 	};
 
-	const static byte G[8] = {
+	const static byte RUS_G[8] = {
 		B00000,
 		B00000,
 		B00000,
@@ -235,7 +444,7 @@ namespace ledmatrix {
 		B10000,
 	};
 
-	const static byte D[8] = {
+	const static byte RUS_D[8] = {
 		B00000,
 		B00000,
 		B00000,
@@ -268,7 +477,7 @@ namespace ledmatrix {
 		B10101,
 	};
 
-	const static byte Z[8] = {
+	const static byte RUS_Z[8] = {
 		B00000,
 		B00000,
 		B00000,
@@ -279,7 +488,7 @@ namespace ledmatrix {
 		B11110,
 	};
 
-	const static byte I[8] = {
+	const static byte RUS_I[8] = {
 		B00000,
 		B00000,
 		B00000,
@@ -301,7 +510,7 @@ namespace ledmatrix {
 		B10001,
 	};
 
-	const static byte K[8] = {
+	const static byte RUS_K[8] = {
 		B00000,
 		B00000,
 		B00000,
@@ -312,7 +521,7 @@ namespace ledmatrix {
 		B10001,
 	};
 
-	const static byte L[8] = {
+	const static byte RUS_L[8] = {
 		B00000,
 		B00000,
 		B00000,
@@ -323,7 +532,18 @@ namespace ledmatrix {
 		B10001,
 	};
 
-	const static byte T[8] = {
+	const static byte RUS_M[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B10001,
+		B11011,
+		B10101,
+		B10001,
+		B10001,
+	};
+
+	const static byte RUS_T[8] = {
 		B00000,
 		B00000,
 		B00000,
@@ -334,7 +554,7 @@ namespace ledmatrix {
 		B00100,
 	};
 
-	const static byte F[8] = {
+	const static byte RUS_F[8] = {
 		B00000,
 		B00000,
 		B00000,

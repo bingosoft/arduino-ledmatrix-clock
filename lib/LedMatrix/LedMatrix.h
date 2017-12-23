@@ -29,7 +29,8 @@ public:
     void clearDisplay();
 
 	void renderUtf8Char(int c, int position);
-	void renderChar(char c, int position);
+	int renderChar(char c, int position);
+	void renderStringInCenter(const String &s, int duration);
 	void renderString(const String &s, int position, int space = 1);
 	void renderFloatingText(const String &s, int duration, int updateDelay);
 	void turnLed(int position, int row, bool on);
