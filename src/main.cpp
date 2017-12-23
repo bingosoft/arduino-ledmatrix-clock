@@ -7,7 +7,7 @@ Application *a;
 
 void setup()
 {
-	Serial.begin(9600);
+	Serial.begin(38400);
 	delay(3000);
 	a = new Application();
 }
