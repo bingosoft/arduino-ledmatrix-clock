@@ -7,7 +7,7 @@
 class NTPClient
 {
 	static const int NTP_PACKET_SIZE = 48;
-	const int currentTimeZone = 1; // UTC+3
+	int timeZoneSeconds;
 	String ntpServerIP;
 
 	WiFiUDP udp;
@@ -21,13 +21,18 @@ class NTPClient
 public:
 	NTPClient(String ntpServerIP);
 
+	void setTimeZone(int seconds);
 	void getTime();
-	int secondsSinceLastUpdate() const { return (millis() - lastUpdated) / 1000; }
-	unsigned long secondsSinceEpoch() const { return unixTime + secondsSinceLastUpdate(); }
+	int secondsSinceLastUpdate() const {
+		return (millis() - lastUpdated) / 1000;
+	}
+	unsigned long secondsSinceEpoch() const {
+		return unixTime + timeZoneSeconds + secondsSinceLastUpdate();
+	}
 	int seconds() const { return secondsSinceEpoch() % 60; }
 	int minutes() const { return (secondsSinceEpoch() / 60) % 60; }
 	int hours() const { return (secondsSinceEpoch() / 60 / 60) % 24; }
-	bool hasTime() const { return unixTime > 0; }
+	bool hasTime() const { return lastUpdated > 0; }
 };
 
 

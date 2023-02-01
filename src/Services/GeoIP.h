@@ -6,13 +6,17 @@
 
 class GeoIP {
 private:
-    WiFiClient client;
+    bool _hasLocation = false;
     String _longitude;
     String _latitude;
+    String _country;
     String _city;
+    WiFiClient client;
 public:
+    const bool &hasLocation;
     const String &latitude;
     const String &longitude;
+    const String &country;
     const String &city;
 
     GeoIP();

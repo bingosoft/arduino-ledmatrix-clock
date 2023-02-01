@@ -47,12 +47,17 @@ void NTPClient::getTime()
 
 	const unsigned long seventyYears = 2208988800UL;
 	unixTime = secsSince1900 - seventyYears;
+	Serial.printf("Received UNIX time from NTP server - %lu\n", unixTime);
 	// print Unix time:
-	unixTime += currentTimeZone * 60 * 60;
 	lastUpdated = millis();
 	// print the hour, minute and second:
 	Serial.printf("The current time is %02d:%02d:%02d\n", hours(), minutes(), seconds());
 	udp.stop();
+}
+
+void NTPClient::setTimeZone(int seconds) {
+	Serial.printf("Setting timezone GMT %s%d\n", seconds > 0 ? "+" : "-", seconds / 3600);
+	timeZoneSeconds = seconds;
 }
 
 void NTPClient::sendNTPpacket(const IPAddress &address)

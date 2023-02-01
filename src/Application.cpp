@@ -17,9 +17,10 @@ Application::Application(const Config &config) :
 		return;
 	}
 
-	geoIP.getLocation();
-	weather.setLocation(geoIP.latitude, geoIP.longitude, geoIP.city);
-	weather.update();
+	if (getLocation()) {
+		weather.setLocation(geoIP.latitude, geoIP.longitude, geoIP.city);
+		weather.update();
+	}
 
 	subscribeTimers();
 }
@@ -33,31 +34,55 @@ void Application::subscribeTimers() {
 }
 
 bool Application::getTime() {
+	Serial.println("Getting time...");
+	ledmatrix.renderFloatingText("Getting time...", 1000, messagesScrollDelay);
+	ledmatrix.clearDisplay();
+
 	const int maxRetries = 4;
 	int retries = 0;
+	ntpClient.setTimeZone(60 * 60);
+
+	ledmatrix.turnLed(0, 1, true);
 	ntpClient.getTime();
 
 	while (!ntpClient.hasTime() && retries < maxRetries) {
 		delay(500);
+		ledmatrix.turnLed(retries + 1, 1, true);
 		retries++;
 		Serial.printf("NTP time still not received. Retry again. Retries: %d\n", retries);
 		ntpClient.getTime();
-		ledmatrix.turnLed(retries, 1, true);
 	}
 
 	if (!ntpClient.hasTime()) {
-		ledmatrix.renderFloatingText("ntp error", 100000);
+		ledmatrix.renderFloatingText("NTP error", 10000, messagesScrollDelay);
 	}
 
 	return ntpClient.hasTime();
+}
+
+bool Application::getLocation() {
+	Serial.println("Getting location...");
+	ledmatrix.renderFloatingText("Getting location...", 1000, messagesScrollDelay);
+	geoIP.getLocation();
+	
+	if (geoIP.hasLocation) {
+		ledmatrix.renderFloatingText(geoIP.country, 1000, messagesScrollDelay);
+		ledmatrix.clearDisplay();
+		ledmatrix.renderFloatingText(geoIP.city, 1000, messagesScrollDelay);
+		ledmatrix.clearDisplay();
+	} else {
+		ledmatrix.renderFloatingText("Error getting location", 1000, messagesScrollDelay);
+	}
+
+	return geoIP.hasLocation;
 }
 
 void Application::connectToWiFi()
 {
 	Serial.printf("Connecting to Wi-Fi network %s, password %s\n", config.wifiNetwork.c_str(), config.wifiPassword.c_str());
 
-	ledmatrix.renderFloatingText("connecting...", 3000, 50, 100);
-	ledmatrix.renderFloatingText(config.wifiNetwork, 3000, 50, 100);
+	ledmatrix.renderFloatingText("Connecting...", 1000, messagesScrollDelay);
+	ledmatrix.renderFloatingText(config.wifiNetwork, 1000, messagesScrollDelay);
 	ledmatrix.clearDisplay();
 
 	int i = 0;
@@ -111,17 +136,17 @@ void Application::displayWeather()
 
 void Application::displayCity()
 {
-	Serial.printf("displaying city %s\n", weather.city.c_str());
+	Serial.printf("Displaying city %s\n", weather.city.c_str());
 	ledmatrix.clearDisplay();
-	ledmatrix.renderFloatingText(weather.city, 5000, 50);
+	ledmatrix.renderFloatingText(weather.city);
 	ledmatrix.clearDisplay();
 }
 
 void Application::displayDescription()
 {
-	Serial.printf("Displaying weather description %s\n", weather.description().c_str());
+	Serial.printf("Displaying weather description %s\n", weather.description.c_str());
 	ledmatrix.clearDisplay();
-	ledmatrix.renderFloatingText(weather.description(), 5000, 50);
+	ledmatrix.renderFloatingText(weather.description);
 	ledmatrix.clearDisplay();
 }
 

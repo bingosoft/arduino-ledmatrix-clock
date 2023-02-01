@@ -7,7 +7,8 @@
 
 Weather::Weather() :
 	temperature(_temperature),
-	city(_city)
+	city(_city),
+	description(_description)
 { }
 
 void Weather::setLocation(const String &latitude, const String &longitude, const String &city) {
@@ -16,8 +17,7 @@ void Weather::setLocation(const String &latitude, const String &longitude, const
 	_city = city;
 }
 
-void Weather::update()
-{
+void Weather::update() {
 	lastUpdate = millis();
 	Serial.println("Update weather for the current location");
 

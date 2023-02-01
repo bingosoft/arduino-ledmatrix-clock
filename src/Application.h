@@ -11,6 +11,7 @@
 
 class Application
 {
+	const int messagesScrollDelay = 30;
 	Weather weather;
 	GeoIP geoIP;
 	LedMatrix ledmatrix;
@@ -22,6 +23,7 @@ class Application
 	void subscribeTimers();
 	void connectToWiFi();
 	bool getTime();
+	bool getLocation();
 	void displayTime();
 	void displayWeather();
 	void displayCity();

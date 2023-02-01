@@ -110,7 +110,7 @@ void LedMatrix::render(const byte *rows, int position, int charWidth)
 
 void LedMatrix::turnLed(int position, int row, bool on)
 {
-	state[row * sections * 8 + position] = on;
+	state[row * lineInDots + position] = on;
 	update(position / 8);
 }
 
@@ -159,7 +159,7 @@ int LedMatrix::stringLengthInDots(const String &s) const
 void LedMatrix::renderString(const String &s, int position, int space)
 {
 	for (int i = 0; i < (int)s.length(); ++i) {
-		int c = s[i];
+		int c = toLowerCase(s[i]);
 
 		if ((c & 0xE0) == 0xC0) { // 2 bytes
 			c = s[i] << 8 | s[i + 1];
@@ -182,27 +182,29 @@ void LedMatrix::renderStringInCenter(const String &s, int duration)
 	delay(duration);
 }
 
-void LedMatrix::renderFloatingText(const String &s, int duration, int updateDelay, int speedDelay)
+void LedMatrix::renderFloatingText(const String &s, int startDelay, int speedDelay)
 {
 	int wordLength = stringLengthInDots(s);
 
 	if (wordLength < 32) {
 		renderString(s, (32 - wordLength) / 2 + 1);
-		delay(duration);
+		delay(startDelay * 2);
 		return;
 	}
 
 	int pos = 0;
-	auto start = millis();
+	bool allRendered = false;
 
-	while ((millis() - start) < (unsigned long)duration) {
+	do {
 		clearDisplay();
 		renderString(s, pos);
-		delay(pos == 0 ? speedDelay : updateDelay);
+		delay(pos == 0 ? startDelay : speedDelay);
 		pos--;
+
 		if (pos < (32 - wordLength)) {
 			pos = 0;
-			delay(speedDelay);
+			delay(startDelay);
+			allRendered = true;
 		}
-	}
+	} while (pos == 0 || !allRendered);
 }

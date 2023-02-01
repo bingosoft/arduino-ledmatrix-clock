@@ -18,11 +18,11 @@ class Weather
 public:
 	const int &temperature;
 	const String &city;
+	const String &description;
 
 	Weather();
 	void setLocation(const String &longitude, const String &latitude, const String &city);
 	void update();
-	const String & description() const { return _description; }
 	int secondsSinceLastUpdate() const { return (millis() - lastUpdate) / 1000; }
 };
 
