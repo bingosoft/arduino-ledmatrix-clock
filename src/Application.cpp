@@ -3,16 +3,18 @@
 #include <ESP8266WiFi.h>
 #include "utils.h"
 
-Application::Application(Config config) :
-	ledmatrix(config.dataInPin, config.clkPin, config.csPin)
+Application::Application(const Config &config) :
+	ledmatrix(config.dataInPin, config.clkPin, config.csPin),
+	config(config)
 {
 	print("Init app...");
 
- 	ledmatrix.setIntensity(0);
-	// ledmatrix.renderFloatingText("абвгдеёжзиклмнопрстуфхцчшщьыъэюя", 50000000, 300);
+    ledmatrix.setIntensity(0);
+	//ledmatrix.renderFloatingText("абвгдеёжзиклмнопрстуфхцчшщьыъэюя", 50000000, 300);
 	connectToWiFi();
 	ntpClient.update();
-	weather.getLocation();
+	geoIP.getLocation();
+	weather.setLocation(geoIP.latitude, geoIP.longitude, geoIP.city);
 	weather.update();
 	subscribeTimers();
 }
@@ -27,7 +29,11 @@ void Application::subscribeTimers() {
 
 void Application::connectToWiFi()
 {
-	Serial.printf("Connecting to Wi-Fi network %s, password %s", config.wifiNetwork.c_str(), config.wifiPassword.c_str());
+	Serial.printf("Connecting to Wi-Fi network %s, password %s\n", config.wifiNetwork.c_str(), config.wifiPassword.c_str());
+
+	ledmatrix.renderFloatingText("connecting...", 3000, 50, 100);
+	ledmatrix.renderFloatingText(config.wifiNetwork, 3000, 50, 100);
+	ledmatrix.clearDisplay();
 
 	int i = 0;
 	WiFi.begin(config.wifiNetwork, config.wifiPassword);
@@ -68,7 +74,7 @@ void Application::displayTime()
 
 void Application::displayWeather()
 {
-	int t = weather.temperature();
+	int t = weather.temperature;
 	String temperature = (t > 0 ? "+" : "") + String(t) + "°";
 	Serial.printf("Displaying temperature - %s\n", temperature.c_str());
 
@@ -80,9 +86,9 @@ void Application::displayWeather()
 
 void Application::displayCity()
 {
-	Serial.printf("displaying city %s\n", weather.city().c_str());
+	Serial.printf("displaying city %s\n", weather.city.c_str());
 	ledmatrix.clearDisplay();
-	ledmatrix.renderFloatingText(weather.city(), 5000, 50);
+	ledmatrix.renderFloatingText(weather.city, 5000, 50);
 	ledmatrix.clearDisplay();
 }
 

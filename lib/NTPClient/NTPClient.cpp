@@ -4,11 +4,10 @@
 void NTPClient::update()
 {
 	Serial.println("Waiting for NTP sync...");
+
+	ip.fromString(ntpServerIP);
+
 	udp.begin(2390);
-	if (!ip.isSet()) {
-		WiFi.hostByName(ntpServerName, ip);
-		Serial.println("Resolved time host name " + ip.toString());
-	}
 	sendNTPpacket(ip); // send an NTP packet to a time server
 	// wait to see if a reply is available
 	delay(1000);

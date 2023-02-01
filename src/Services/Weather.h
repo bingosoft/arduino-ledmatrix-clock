@@ -6,20 +6,22 @@
 
 class Weather
 {
+	int _temperature;
+	String _city;
 	WiFiClient _client;
 	String longitude;
 	String latitude;
-	int _temperature;
 	String _description;
-	String _city;
+	const String appId = "9542bcaedac315a65ddec8b335c4290b";
 	unsigned long lastUpdate = 0;
 
 public:
-	void getLocation();
-	bool locationReceived() const { return longitude.length() > 0; }
+	const int &temperature;
+	const String &city;
+
+	Weather();
+	void setLocation(const String &longitude, const String &latitude, const String &city);
 	void update();
-	int temperature() const { return _temperature; }
-	const String & city() const { return _city; }
 	const String & description() const { return _description; }
 	int secondsSinceLastUpdate() const { return (millis() - lastUpdate) / 1000; }
 };

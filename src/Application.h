@@ -7,10 +7,12 @@
 #include <Timers.h>
 #include "Config.h"
 #include "Services/Weather.h"
+#include "Services/GeoIP.h"
 
 class Application
 {
 	Weather weather;
+	GeoIP geoIP;
 	LedMatrix ledmatrix;
 	NTPClient ntpClient;
 	Timers<5> timers;
