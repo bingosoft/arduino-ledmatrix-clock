@@ -27,6 +27,8 @@ void Application::subscribeTimers() {
 
 void Application::connectToWiFi()
 {
+	Serial.printf("Connecting to Wi-Fi network %s, password %s", config.wifiNetwork.c_str(), config.wifiPassword.c_str());
+
 	int i = 0;
 	WiFi.begin(config.wifiNetwork, config.wifiPassword);
 

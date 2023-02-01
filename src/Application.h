@@ -28,7 +28,7 @@ class Application
 	void updateTime() { ntpClient.update(); }
 
 public:
-	Application(Config config);
+	Application(const Config &config);
 	void exec();
 };
 

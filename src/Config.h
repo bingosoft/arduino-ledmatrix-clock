@@ -1,14 +1,27 @@
+#ifndef CONFIG_H
+#define CONFIG_H
+
 #include <Arduino.h>
 
 struct Config {
     String wifiNetwork;
     String wifiPassword;
-    int dataInPin = 13;
-    int clkPin = 14;
-    int csPin = 15;
+    int dataInPin;
+    int clkPin;
+    int csPin;
 
-    Config() {
-        wifiNetwork = "bingosoft-wifi";
-        wifiPassword = "159753Bingo";
-    }
+    static Config d1Mini;
+
+    Config(
+        String wifiNetwork,
+        String wifiPassword,
+        int dataInPin,
+        int clkPin,
+        int csPin
+    ) : wifiNetwork(wifiNetwork), wifiPassword(wifiPassword), dataInPin(dataInPin), clkPin(clkPin), csPin(csPin)
+    { }
+
+    Config() { }
 };
+
+#endif
