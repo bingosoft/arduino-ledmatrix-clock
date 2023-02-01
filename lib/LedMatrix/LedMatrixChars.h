@@ -727,6 +727,17 @@ namespace ledmatrix {
 		B00000,
 		B00000,
 	};
+
+	const static byte DOT[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B00000,
+		B00000,
+		B00000,
+		B00000,
+		B01000,
+	};
 }
 
 
