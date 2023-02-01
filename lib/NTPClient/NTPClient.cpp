@@ -1,32 +1,39 @@
 #include "NTPClient.h"
 #include <ESP8266WiFi.h>
 
-void NTPClient::update()
+NTPClient::NTPClient(String ntpServerIP) :
+	ntpServerIP(ntpServerIP) 
+{ }
+
+void NTPClient::getTime()
 {
 	Serial.println("Waiting for NTP sync...");
 
 	ip.fromString(ntpServerIP);
+
+	Serial.printf("Set IP for NTP server %s\n", ip.toString().c_str());
 
 	udp.begin(2390);
 	sendNTPpacket(ip); // send an NTP packet to a time server
 	// wait to see if a reply is available
 	delay(1000);
 
-	int cb;
+	int bytesCount;
 	int retries = 10;
-	while (!(cb = udp.parsePacket())) {
+
+	while (!(bytesCount = udp.parsePacket())) {
 		Serial.println("no packet yet");
 		delay(300);
 
 		if (retries == 0) {
 			Serial.println("No answer from remote NTP server!");
+			udp.stop();
 			return;
 		}
 
 		retries--;
 	}
-	Serial.print("packet received, length=");
-	Serial.println(cb);
+	Serial.printf("packet received, length=%d\n", bytesCount);
 	udp.read(packetBuffer, NTP_PACKET_SIZE); // read the packet into the buffer
 
 	//the timestamp starts at byte 40 of the received packet and is four bytes,

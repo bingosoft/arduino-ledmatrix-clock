@@ -21,13 +21,13 @@ class Application
 
 	void subscribeTimers();
 	void connectToWiFi();
+	bool getTime();
 	void displayTime();
 	void displayWeather();
 	void displayCity();
 	void displayDescription();
 
 	void updateWeather() { weather.update(); }
-	void updateTime() { ntpClient.update(); }
 
 public:
 	Application(const Config &config);

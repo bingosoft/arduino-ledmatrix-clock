@@ -6,9 +6,9 @@
 
 class NTPClient
 {
-	const char* ntpServerIP = "142.132.210.78";
 	static const int NTP_PACKET_SIZE = 48;
 	const int currentTimeZone = 1; // UTC+3
+	String ntpServerIP;
 
 	WiFiUDP udp;
 	IPAddress ip;
@@ -19,7 +19,9 @@ class NTPClient
 	void sendNTPpacket(const IPAddress &address);
 
 public:
-	void update();
+	NTPClient(String ntpServerIP);
+
+	void getTime();
 	int secondsSinceLastUpdate() const { return (millis() - lastUpdated) / 1000; }
 	unsigned long secondsSinceEpoch() const { return unixTime + secondsSinceLastUpdate(); }
 	int seconds() const { return secondsSinceEpoch() % 60; }

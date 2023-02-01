@@ -4,6 +4,7 @@
 
 Application::Application(const Config &config) :
 	ledmatrix(config.dataInPin, config.clkPin, config.csPin),
+	ntpClient(NTPClient(config.ntpServerIP)),
 	config(config)
 {
 	Serial.println("Init app...");
@@ -11,10 +12,15 @@ Application::Application(const Config &config) :
     ledmatrix.setIntensity(0);
 	//ledmatrix.renderFloatingText("абвгдеёжзиклмнопрстуфхцчшщьыъэюя", 50000000, 300);
 	connectToWiFi();
-	ntpClient.update();
+
+	if (!getTime()) {
+		return;
+	}
+
 	geoIP.getLocation();
 	weather.setLocation(geoIP.latitude, geoIP.longitude, geoIP.city);
 	weather.update();
+
 	subscribeTimers();
 }
 
@@ -23,7 +29,27 @@ void Application::subscribeTimers() {
 	timers.schedule(30000, this, &Application::displayDescription, 20000);
 	timers.schedule(180000, this, &Application::displayCity, 30000);
 	timers.schedule(5 * 60000, &weather, &Weather::update);
-	timers.schedule(30 * 60000, &ntpClient, &NTPClient::update);
+	timers.schedule(30 * 60000, &ntpClient, &NTPClient::getTime);
+}
+
+bool Application::getTime() {
+	const int maxRetries = 4;
+	int retries = 0;
+	ntpClient.getTime();
+
+	while (!ntpClient.hasTime() && retries < maxRetries) {
+		delay(500);
+		retries++;
+		Serial.printf("NTP time still not received. Retry again. Retries: %d\n", retries);
+		ntpClient.getTime();
+		ledmatrix.turnLed(retries, 1, true);
+	}
+
+	if (!ntpClient.hasTime()) {
+		ledmatrix.renderFloatingText("ntp error", 100000);
+	}
+
+	return ntpClient.hasTime();
 }
 
 void Application::connectToWiFi()

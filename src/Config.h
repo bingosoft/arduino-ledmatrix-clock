@@ -6,6 +6,7 @@
 struct Config {
     String wifiNetwork;
     String wifiPassword;
+    String ntpServerIP;
     int dataInPin;
     int clkPin;
     int csPin;
@@ -15,10 +16,16 @@ struct Config {
     Config(
         String wifiNetwork,
         String wifiPassword,
+        String ntpServerIP,
         int dataInPin,
         int clkPin,
         int csPin
-    ) : wifiNetwork(wifiNetwork), wifiPassword(wifiPassword), dataInPin(dataInPin), clkPin(clkPin), csPin(csPin)
+    ) : wifiNetwork(wifiNetwork),
+        wifiPassword(wifiPassword),
+        ntpServerIP(ntpServerIP),
+        dataInPin(dataInPin),
+        clkPin(clkPin),
+        csPin(csPin)
     { }
 
     Config() { }
