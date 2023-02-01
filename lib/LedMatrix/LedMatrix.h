@@ -30,7 +30,7 @@ public:
 	int renderChar(int c, int position);
 	void renderStringInCenter(const String &s, int duration);
 	void renderString(const String &s, int position, int space = 1);
-	void renderFloatingText(const String &s, int duration, int updateDelay);
+	void renderFloatingText(const String &s, int duration, int updateDelay = 50, int speedDelay = 1000);
 	void turnLed(int position, int row, bool on);
 };
 

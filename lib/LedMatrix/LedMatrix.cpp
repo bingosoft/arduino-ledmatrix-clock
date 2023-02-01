@@ -183,7 +183,7 @@ void LedMatrix::renderStringInCenter(const String &s, int duration)
 	delay(duration);
 }
 
-void LedMatrix::renderFloatingText(const String &s, int duration, int updateDelay)
+void LedMatrix::renderFloatingText(const String &s, int duration, int updateDelay, int speedDelay)
 {
 	int wordLength = stringLengthInDots(s);
 
@@ -199,11 +199,11 @@ void LedMatrix::renderFloatingText(const String &s, int duration, int updateDela
 	while ((millis() - start) < (unsigned long)duration) {
 		clearDisplay();
 		renderString(s, pos);
-		delay(pos == 0 ? 1000 : updateDelay);
+		delay(pos == 0 ? speedDelay : updateDelay);
 		pos--;
 		if (pos < (32 - wordLength)) {
 			pos = 0;
-			delay(1000);
+			delay(speedDelay);
 		}
 	}
 }
