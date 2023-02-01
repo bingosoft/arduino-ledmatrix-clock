@@ -1,13 +1,12 @@
 #include "Application.h"
 #include <NTPClient.h>
 #include <ESP8266WiFi.h>
-#include "utils.h"
 
 Application::Application(const Config &config) :
 	ledmatrix(config.dataInPin, config.clkPin, config.csPin),
 	config(config)
 {
-	print("Init app...");
+	Serial.println("Init app...");
 
     ledmatrix.setIntensity(0);
 	//ledmatrix.renderFloatingText("абвгдеёжзиклмнопрстуфхцчшщьыъэюя", 50000000, 300);

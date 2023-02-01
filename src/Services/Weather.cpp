@@ -1,7 +1,6 @@
 #include "Weather.h"
 #include <ESP8266HTTPClient.h>
 #include <ArduinoJson.h>
-#include "utils.h"
 
 // curl "http://api.openweathermap.org/data/2.5/weather?lat=59.8944&lon=30.2642&appid=9542bcaedac315a65ddec8b335c4290b"
 // curl http://freegeoip.net/json/

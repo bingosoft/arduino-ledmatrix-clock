@@ -5,25 +5,34 @@
 
 class LedMatrix
 {
-// digital pins
-	int DIN;
-	int CLK;
-	int CS;
-	static const int SECTIONS = 4;
-	static const int LINE = 8 * SECTIONS;
-	bool state[SECTIONS * 8 * 8] = {}; // each led state
+	enum Operation{
+		DecodeMode = 9,
+		Intencity = 10,
+		ScanLimit = 11,
+		ShutDown = 12,
+		DisplayTest = 15
+	};
+
+	int dataInPin;
+	int clkPin;
+	int csPin;
+	static const int sections = 4;
+	static const int lineInDots = 8 * sections;
+	bool state[sections * 8 * 8] = {}; // each led state
 
     void clearDisplay(int device);
     void shutdown(int device, bool status);
     void setScanLimit(int device, int limit);
 	void render(const byte *rows, int position, int charWidth);
 	void update(int device);
+    void spiTransfer(int device, Operation operation, byte data);
+    void spiTransfer(int device, int row, byte data);
+    void setIntensity(int device, int intensity);
 	int stringLengthInDots(const String &s) const;
+
 public:
 	LedMatrix(int din, int clk, int cs);
 
-    void spiTransfer(int device, byte row, byte data);
-    void setIntensity(int device, int intensity);
     void setIntensity(int intensity);
     void clearDisplay();
 

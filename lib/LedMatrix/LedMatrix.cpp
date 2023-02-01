@@ -2,77 +2,76 @@
 #include "LedMatrixChars.h"
 #include "CharInfo.h"
 
-#define OP_DECODEMODE  9
-#define OP_INTENSITY   10
-#define OP_SCANLIMIT   11
-#define OP_SHUTDOWN    12
-#define OP_DISPLAYTEST 15
-
 LedMatrix::LedMatrix(int din, int clk, int cs)
-	: DIN(din), CLK(clk), CS(cs)
+	: dataInPin(din), clkPin(clk), csPin(cs)
 {
 	Serial.printf("Setup led matrix on digital pins MOSI - %d, CLK - %d, CS - %d\n", din, clk, cs);
+
     pinMode(din, OUTPUT);
     pinMode(clk, OUTPUT);
     pinMode(cs, OUTPUT);
     digitalWrite(cs, HIGH);
 
-	for (int i = 0; i < SECTIONS; ++i) {
-	 	spiTransfer(i, OP_DISPLAYTEST, 0);
+	for (int i = 0; i < sections; ++i) {
+	 	spiTransfer(i, DisplayTest, 0);
 	 	setScanLimit(i, 7);
-	 	spiTransfer(i, OP_DECODEMODE, 0);
+	 	spiTransfer(i, DecodeMode, 0);
 	 	clearDisplay(i);
 		shutdown(i, false);
 	}
 }
 
-void LedMatrix::spiTransfer(int device, byte opcode, byte data)
+void LedMatrix::spiTransfer(int device, Operation opcode, byte data) {
+	spiTransfer(device, static_cast<int>(opcode), data);
+}
+
+void LedMatrix::spiTransfer(int device, int row, byte data)
 {
     int offset = device * 2;
-    int maxbytes = SECTIONS * 2;
+    int maxbytes = sections * 2;
     byte spidata[16];
 
     for (int i = 0; i < maxbytes; ++i) {
 		spidata[i] = 0;
 	}
 
-    spidata[offset + 1] = opcode;
+    spidata[offset + 1] = row;
     spidata[offset] = data;
     //enable the line
-    digitalWrite(CS, LOW);
+    digitalWrite(csPin, LOW);
     //Now shift out the data
     for (int i = maxbytes; i > 0; --i) {
-	 	shiftOut(DIN, CLK, MSBFIRST, spidata[i - 1]);
+	 	shiftOut(dataInPin, clkPin, MSBFIRST, spidata[i - 1]);
 	}
     //latch the data onto the display
-    digitalWrite(CS, HIGH);
+    digitalWrite(csPin, HIGH);
 }
 
 void LedMatrix::shutdown(int device, bool status)
 {
-	spiTransfer(device, OP_SHUTDOWN, !status);
+	spiTransfer(device, ShutDown, !status);
 }
 
 void LedMatrix::setScanLimit(int device, int limit)
 {
-	spiTransfer(device, OP_SCANLIMIT, limit);
+	spiTransfer(device, ScanLimit, limit);
 }
 
 void LedMatrix::setIntensity(int intensity)
 {
-	for (int i = 0; i < SECTIONS; ++i) {
+	for (int i = 0; i < sections; ++i) {
 	 	setIntensity(i, intensity);
 	}
 }
 
 void LedMatrix::setIntensity(int device, int intensity) // 0..15
 {
-	spiTransfer(device, OP_INTENSITY, intensity);
+	spiTransfer(device, Intencity, intensity);
 }
 
 void LedMatrix::clearDisplay()
 {
-    for (int i = 0; i < SECTIONS; ++i) {
+    for (int i = 0; i < sections; ++i) {
 		clearDisplay(i);
     }
 }
@@ -83,7 +82,7 @@ void LedMatrix::clearDisplay(int device)
 		spiTransfer(device, i + 1, 0);
 
 		for (int j = 0; j < 8; ++j) {
-			state[i * LINE + device * 8 + j] = false;
+			state[i * lineInDots + device * 8 + j] = false;
 		}
     }
 }
@@ -95,10 +94,10 @@ void LedMatrix::render(const byte *rows, int position, int charWidth)
 
 		for (int j = 0; j < charWidth; ++j) {
 			int pos = j + position;
-			if (pos > LINE || pos < 0)
+			if (pos > lineInDots || pos < 0)
 				continue;
 
-			state[i * LINE + pos] = value & (1 << (charWidth - j - 1));
+			state[i * lineInDots + pos] = value & (1 << (charWidth - j - 1));
 		}
 	}
 	int device = position / 8;
@@ -111,7 +110,7 @@ void LedMatrix::render(const byte *rows, int position, int charWidth)
 
 void LedMatrix::turnLed(int position, int row, bool on)
 {
-	state[row * SECTIONS * 8 + position] = on;
+	state[row * sections * 8 + position] = on;
 	update(position / 8);
 }
 
@@ -120,7 +119,7 @@ void LedMatrix::update(int device)
 	for (int i = 0; i < 8; ++i) {
 		int val = 0;
 		for (int j = 0; j < 8; ++j) {
-			bool on = state[i * LINE + j + device * 8];
+			bool on = state[i * lineInDots + j + device * 8];
 			val |= on << j;
 		}
 		spiTransfer(device, 8 - i, val);
@@ -169,7 +168,7 @@ void LedMatrix::renderString(const String &s, int position, int space)
 		int charWidth = renderChar(c, position);
 		position += charWidth + space;
 
-		if (position > LINE) {
+		if (position > lineInDots) {
 			return;
 		}
 	}
