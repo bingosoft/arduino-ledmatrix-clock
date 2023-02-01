@@ -87,7 +87,7 @@ void LedMatrix::clearDisplay(int device)
     }
 }
 
-void LedMatrix::render(const byte *rows, int position, int charWidth)
+void LedMatrix::render(const byte *rows, int position, int charWidth, bool updateDisplay)
 {
 	for (int i = 0; i < 8; ++i) {
 		int value = rows[i];
@@ -100,11 +100,13 @@ void LedMatrix::render(const byte *rows, int position, int charWidth)
 			state[i * lineInDots + pos] = value & (1 << (charWidth - j - 1));
 		}
 	}
-	int device = position / 8;
-	update(device);
+	if (updateDisplay) {
+		int device = position / 8;
+		update(device);
 
-	if ((position + charWidth) / 8 != device) {
-		update(device + 1); // near section affected
+		if ((position + charWidth) / 8 != device) {
+			update(device + 1); // near section affected
+		}
 	}
 }
 
@@ -114,23 +116,23 @@ void LedMatrix::turnLed(int position, int row, bool on)
 	update(position / 8);
 }
 
-void LedMatrix::update(int device)
+void LedMatrix::update(int section)
 {
 	for (int i = 0; i < 8; ++i) {
 		int val = 0;
 		for (int j = 0; j < 8; ++j) {
-			bool on = state[i * lineInDots + j + device * 8];
+			bool on = state[i * lineInDots + j + section * 8];
 			val |= on << j;
 		}
-		spiTransfer(device, 8 - i, val);
+		spiTransfer(section, 8 - i, val);
 	}
 }
 
-int LedMatrix::renderChar(int c, int position)
+int LedMatrix::renderChar(int c, int position, bool updateDisplay)
 {
 	CharInfo info = CharInfo::byChar(c);
 	if (info.dots) {
-		render(info.dots, position, info.charWidth);
+		render(info.dots, position, info.charWidth, updateDisplay);
 	} else {
 		Serial.println("char not found");
 	}
@@ -158,6 +160,10 @@ int LedMatrix::stringLengthInDots(const String &s) const
 
 void LedMatrix::renderString(const String &s, int position, int space)
 {
+	for (int i = 0; i < sections * 8 * 8; ++i) {
+		state[i] = false; // clear all
+	}
+
 	for (int i = 0; i < (int)s.length(); ++i) {
 		int c = toLowerCase(s[i]);
 
@@ -165,12 +171,16 @@ void LedMatrix::renderString(const String &s, int position, int space)
 			c = s[i] << 8 | s[i + 1];
 			++i;
 		}
-		int charWidth = renderChar(c, position);
+		int charWidth = renderChar(c, position, false);
 		position += charWidth + space;
 
 		if (position > lineInDots) {
-			return;
+			break;
 		}
+	}
+
+	for (int i = 0; i < sections; ++i) {
+		update(i);
 	}
 }
 
@@ -196,7 +206,6 @@ void LedMatrix::renderFloatingText(const String &s, int startDelay, int speedDel
 	bool allRendered = false;
 
 	do {
-		clearDisplay();
 		renderString(s, pos);
 		delay(pos == 0 ? startDelay : speedDelay);
 		pos--;

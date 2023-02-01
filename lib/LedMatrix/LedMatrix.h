@@ -23,7 +23,7 @@ class LedMatrix
     void clearDisplay(int device);
     void shutdown(int device, bool status);
     void setScanLimit(int device, int limit);
-	void render(const byte *rows, int position, int charWidth);
+	void render(const byte *rows, int position, int charWidth, bool updateDisplay);
 	void update(int device);
     void spiTransfer(int device, Operation operation, byte data);
     void spiTransfer(int device, int row, byte data);
@@ -36,7 +36,7 @@ public:
     void setIntensity(int intensity);
     void clearDisplay();
 
-	int renderChar(int c, int position);
+	int renderChar(int c, int position, bool updateDisplay = true);
 	void renderStringInCenter(const String &s, int duration);
 	void renderString(const String &s, int position, int space = 1);
 	void renderFloatingText(const String &s, int startDelay = 1000, int speedDelay = 50);
