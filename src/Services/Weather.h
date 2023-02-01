@@ -2,9 +2,11 @@
 #define WEATHER_H
 
 #include <Arduino.h>
+#include <WiFiClient.h>
 
 class Weather
 {
+	WiFiClient _client;
 	String longitude;
 	String latitude;
 	int _temperature;

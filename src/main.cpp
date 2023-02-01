@@ -7,9 +7,9 @@ Application *a;
 
 void setup()
 {
-	Serial.begin(38400);
+	Serial.begin(115200);
 	delay(3000);
-	a = new Application();
+	a = new Application(Config());
 }
 
 void loop()

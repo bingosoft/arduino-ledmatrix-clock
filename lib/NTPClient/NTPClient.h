@@ -6,9 +6,10 @@
 
 class NTPClient
 {
-	const char* ntpServerName = "timeserver.ru";
+	// const char* ntpServerName = "timeserver.ru";
+	const char* ntpServerName = "pool.ntp.org";
 	static const int NTP_PACKET_SIZE = 48;
-	const int currentTimeZone = 3; // UTC+3
+	const int currentTimeZone = 1; // UTC+3
 
 	WiFiUDP udp;
 	IPAddress ip;

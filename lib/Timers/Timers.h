@@ -12,27 +12,29 @@ template <class T>
 struct TimerInfo : ITimerInfo
 {
 	typedef void (T::*Handler)();
-
+private:
+	unsigned long startTime;
+	unsigned long interval;
 	T *object;
 	Handler handler;
-	int interval;
-	unsigned long elapsed;
 
+public:
 	TimerInfo(int interval, T *object, Handler handler, int delay)	:
 		interval(interval),
-		elapsed(millis()),
 		object(object),
 		handler(handler)
 	{
+		startTime = millis();
+
 		if (delay > 0) {
-			elapsed -= interval - delay;
+			startTime -= interval - delay;
 		}
 	}
 
 	void check(unsigned long time) override
 	{
-		if ((time - elapsed) > interval) {
-			elapsed += interval;
+		if ((time - startTime) > interval) {
+			startTime += interval;
 			(object->*handler)();
 		}
 	}

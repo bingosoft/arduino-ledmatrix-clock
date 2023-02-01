@@ -5,9 +5,9 @@ void NTPClient::update()
 {
 	Serial.println("Waiting for NTP sync...");
 	udp.begin(2390);
-	if (ip.toString() == "0.0.0.0") {
+	if (!ip.isSet()) {
 		WiFi.hostByName(ntpServerName, ip);
-		Serial.println("resolved time host name " + ip.toString());
+		Serial.println("Resolved time host name " + ip.toString());
 	}
 	sendNTPpacket(ip); // send an NTP packet to a time server
 	// wait to see if a reply is available
@@ -51,7 +51,7 @@ void NTPClient::update()
 
 void NTPClient::sendNTPpacket(const IPAddress &address)
 {
-	Serial.println("sending NTP packet...");
+	Serial.printf("Sending NTP packet for IP: %s\n", address.toString().c_str());
 	// set all bytes in the buffer to 0
 	memset(packetBuffer, 0, NTP_PACKET_SIZE);
 	// Initialize values needed to form NTP request

@@ -5,36 +5,30 @@
 #include <Arduino.h>
 #include <NTPClient.h>
 #include <Timers.h>
-#include "Weather.h"
+#include "Config.h"
+#include "Services/Weather.h"
 
 class Application
 {
-	// const char* ssid = "network55";
-	// const char* password = "eiS4aepheehi";
-	const char* ssid = "bingosoft-wifi";
-	const char* password = "159753bingo";
-
-	// GPIO digital pins
-	const int DATA_IN = 13;
-	const int CS = 15;
-	const int CLK = 14;
-
-	Weather w;
-	LedMatrix l;
-	NTPClient ntp;
-	Timers<5> t;
+	Weather weather;
+	LedMatrix ledmatrix;
+	NTPClient ntpClient;
+	Timers<5> timers;
+	Config config;
 	bool dotVisible = false;
 
+	void subscribeTimers();
 	void connectToWiFi();
 	void displayTime();
 	void displayWeather();
 	void displayCity();
 	void displayDescription();
 
-	void updateWeather() { w.update(); }
-	void updateTime() { ntp.update(); }
+	void updateWeather() { weather.update(); }
+	void updateTime() { ntpClient.update(); }
+
 public:
-	Application();
+	Application(Config config);
 	void exec();
 };
 

@@ -143,7 +143,7 @@ int LedMatrix::stringLengthInDots(const String &s) const
 	int c;
 	int dots = 0;
 
-	for (int i = 0; i < s.length(); ++i) {
+	for (int i = 0; i < (int)s.length(); ++i) {
 		if ((s[i] & 0xE0) == 0xC0) {
 			c = s[i] << 8 | s[i + 1];
 			i += 1;
@@ -159,7 +159,7 @@ int LedMatrix::stringLengthInDots(const String &s) const
 
 void LedMatrix::renderString(const String &s, int position, int space)
 {
-	for (int i = 0; i < s.length(); ++i) {
+	for (int i = 0; i < (int)s.length(); ++i) {
 		int c = s[i];
 
 		if ((c & 0xE0) == 0xC0) { // 2 bytes
@@ -194,9 +194,9 @@ void LedMatrix::renderFloatingText(const String &s, int duration, int updateDela
 	}
 
 	int pos = 0;
-	int start = millis();
+	auto start = millis();
 
-	while ((millis() - start) < duration) {
+	while ((millis() - start) < (unsigned long)duration) {
 		clearDisplay();
 		renderString(s, pos);
 		delay(pos == 0 ? 1000 : updateDelay);
