@@ -26,11 +26,11 @@ Application::Application(const Config &config) :
 }
 
 void Application::subscribeTimers() {
-	timers.schedule(30000, this, &Application::displayWeather, 10000);
-	timers.schedule(30000, this, &Application::displayDescription, 20000);
-	timers.schedule(180000, this, &Application::displayCity, 30000);
-	timers.schedule(5 * 60000, &weather, &Weather::update);
-	timers.schedule(30 * 60000, &ntpClient, &NTPClient::getTime);
+	timers.schedule(30 * 1000, this, &Application::displayWeather, 10000);
+	timers.schedule(30 * 1000, this, &Application::displayDescription, 20000);
+	timers.schedule(5 * 60 * 1000, this, &Application::displayCity, 30000);
+	timers.schedule(5 * 60 * 1000, &weather, &Weather::update);
+	timers.schedule(30 * 60 * 1000, &ntpClient, &NTPClient::getTime);
 }
 
 bool Application::getTime() {

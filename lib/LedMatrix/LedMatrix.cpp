@@ -94,18 +94,18 @@ void LedMatrix::render(const byte *rows, int position, int charWidth, bool updat
 
 		for (int j = 0; j < charWidth; ++j) {
 			int pos = j + position;
-			if (pos > lineInDots || pos < 0)
+			if (pos >= lineInDots || pos < 0)
 				continue;
 
 			state[i * lineInDots + pos] = value & (1 << (charWidth - j - 1));
 		}
 	}
 	if (updateDisplay) {
-		int device = position / 8;
-		update(device);
+		int section = position / 8;
+		update(section);
 
-		if ((position + charWidth) / 8 != device) {
-			update(device + 1); // near section affected
+		if ((position + charWidth) / 8 != section) {
+			update(section + 1); // near section affected
 		}
 	}
 }
@@ -118,6 +118,9 @@ void LedMatrix::turnLed(int position, int row, bool on)
 
 void LedMatrix::update(int section)
 {
+	if (section > sections)
+		return;
+
 	for (int i = 0; i < 8; ++i) {
 		int val = 0;
 		for (int j = 0; j < 8; ++j) {
@@ -158,7 +161,7 @@ int LedMatrix::stringLengthInDots(const String &s) const
 	return dots - 1; // minus last space
 }
 
-void LedMatrix::renderString(const String &s, int position, int space)
+void LedMatrix::renderString(const String &s, int position)
 {
 	for (int i = 0; i < sections * 8 * 8; ++i) {
 		state[i] = false; // clear all
@@ -172,7 +175,7 @@ void LedMatrix::renderString(const String &s, int position, int space)
 			++i;
 		}
 		int charWidth = renderChar(c, position, false);
-		position += charWidth + space;
+		position += charWidth + 1;
 
 		if (position > lineInDots) {
 			break;
