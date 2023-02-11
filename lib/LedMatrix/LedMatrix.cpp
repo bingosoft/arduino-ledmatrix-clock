@@ -189,9 +189,9 @@ void LedMatrix::renderString(const String &s, int position)
 
 void LedMatrix::renderStringInCenter(const String &s, int duration)
 {
-	int wordLength = min(stringLengthInDots(s), 32);
+	int wordLength = min(stringLengthInDots(s), lineInDots);
 
-	renderString(s, (32 - wordLength) / 2 + 1);
+	renderString(s, (lineInDots - wordLength) / 2 + 1);
 	delay(duration);
 }
 

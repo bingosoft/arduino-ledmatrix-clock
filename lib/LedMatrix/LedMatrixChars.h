@@ -718,14 +718,14 @@ namespace ledmatrix {
 	};
 
 	const static byte DEGREE[8] = {
-		B01000,
-		B10100,
-		B01000,
-		B00000,
-		B00000,
-		B00000,
-		B00000,
-		B00000,
+		B010,
+		B101,
+		B010,
+		B000,
+		B000,
+		B000,
+		B000,
+		B000,
 	};
 
 	const static byte DOT[8] = {

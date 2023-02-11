@@ -25,7 +25,7 @@ class Application
 	bool getTime();
 	bool getLocation();
 	void displayTime();
-	void displayWeather();
+	void displayTemperature();
 	void displayCity();
 	void displayDescription();
 

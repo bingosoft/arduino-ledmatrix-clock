@@ -83,7 +83,7 @@ struct CharInfo {
 		case 'э': info.charWidth = 4; info.dots = YE; break;
 		case 'ю': info.dots = YU; break;
 		case 'я': info.charWidth = 4; info.dots = YA; break;
-		case '°': info.dots = DEGREE; break;
+		case '°': info.dots = DEGREE; info.charWidth = 3; break;
 		case '.': info.charWidth = 1; info.dots = DOT; break;
 		}
 		return info;

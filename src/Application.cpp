@@ -26,7 +26,7 @@ Application::Application(const Config &config) :
 }
 
 void Application::subscribeTimers() {
-	timers.schedule(30 * 1000, this, &Application::displayWeather, 10000);
+	timers.schedule(30 * 1000, this, &Application::displayTemperature, 10000);
 	timers.schedule(30 * 1000, this, &Application::displayDescription, 20000);
 	timers.schedule(5 * 60 * 1000, this, &Application::displayCity, 30000);
 	timers.schedule(5 * 60 * 1000, &weather, &Weather::update);
@@ -122,7 +122,7 @@ void Application::displayTime()
 	Serial.printf("Displaying time - %02d:%02d:%02d\n", hours, minutes, seconds);
 }
 
-void Application::displayWeather()
+void Application::displayTemperature()
 {
 	int t = weather.temperature;
 	String temperature = (t > 0 ? "+" : "") + String(t) + "°";
@@ -130,7 +130,6 @@ void Application::displayWeather()
 
 	ledmatrix.clearDisplay();
 	ledmatrix.renderStringInCenter(temperature, 5000);
-	delay(5000);
 	ledmatrix.clearDisplay();
 }
 
