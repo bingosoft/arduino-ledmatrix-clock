@@ -201,8 +201,6 @@ void LedMatrix::renderFloatingText(const String &s, int startDelay, int speedDel
 {
 	int wordLength = stringLengthInDots(s);
 
-	}
-
 	if (wordLength <= lineInDots) {
 		renderString(s, (lineInDots - wordLength) / 2);
 		delay(startDelay * 2);

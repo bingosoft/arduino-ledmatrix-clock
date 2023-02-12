@@ -16,7 +16,7 @@ struct DotsChar {
 		int maxWidth = 1;
 
 		for (int i = 0; i < 8; ++i) {
-			maxWidth = max(maxWidth, (int)floor(log2(dots[i])) + 1);
+			maxWidth = std::max(maxWidth, (int)floor(log2(dots[i])) + 1);
 		}
 
 		this->charWidth = maxWidth;
