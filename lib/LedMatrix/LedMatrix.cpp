@@ -1,6 +1,5 @@
 #include "LedMatrix.h"
 #include "LedMatrixChars.h"
-#include "CharInfo.h"
 
 LedMatrix::LedMatrix(int din, int clk, int cs)
 	: dataInPin(din), clkPin(clk), csPin(cs)
@@ -133,13 +132,15 @@ void LedMatrix::update(int section)
 
 int LedMatrix::renderChar(int c, int position, bool updateDisplay)
 {
-	CharInfo info = CharInfo::byChar(c);
-	if (info.dots) {
-		render(info.dots, position, info.charWidth, updateDisplay);
-	} else {
-		Serial.println("char not found");
+	auto info = mapping.getDotsByChar(c);
+
+	if (!info.has_value()) {
+		Serial.printf("Char %c not found, skip rendering\n", (char)c);
+		return 0;
 	}
-	return info.charWidth;
+
+	render(info->dots, position, info->charWidth, updateDisplay);
+	return info->charWidth;
 }
 
 int LedMatrix::stringLengthInDots(const String &s) const
@@ -152,10 +153,11 @@ int LedMatrix::stringLengthInDots(const String &s) const
 			c = s[i] << 8 | s[i + 1];
 			i += 1;
 		} else {
-			c = s[i];
+			c = toLowerCase(s[i]);
 		}
-		CharInfo info = CharInfo::byChar(c);
-		dots += info.charWidth + 1; // + SPACE
+		auto info = mapping.getDotsByChar(c);
+		int charWidth = info.has_value() ? info->charWidth : 0;
+		dots += charWidth + 1; // + SPACE
 	}
 
 	return dots - 1; // minus last space
@@ -199,8 +201,10 @@ void LedMatrix::renderFloatingText(const String &s, int startDelay, int speedDel
 {
 	int wordLength = stringLengthInDots(s);
 
-	if (wordLength < 32) {
-		renderString(s, (32 - wordLength) / 2 + 1);
+	}
+
+	if (wordLength <= lineInDots) {
+		renderString(s, (lineInDots - wordLength) / 2);
 		delay(startDelay * 2);
 		return;
 	}
@@ -213,7 +217,7 @@ void LedMatrix::renderFloatingText(const String &s, int startDelay, int speedDel
 		delay(pos == 0 ? startDelay : speedDelay);
 		pos--;
 
-		if (pos < (32 - wordLength)) {
+		if (pos < (lineInDots - wordLength)) {
 			pos = 0;
 			delay(startDelay);
 			allRendered = true;

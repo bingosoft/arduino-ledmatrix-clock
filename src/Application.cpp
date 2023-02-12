@@ -10,7 +10,9 @@ Application::Application(const Config &config) :
 	Serial.println("Init app...");
 
     ledmatrix.setIntensity(0);
-	//ledmatrix.renderFloatingText("абвгдеёжзиклмнопрстуфхцчшщьыъэюя", 50000000, 300);
+	// ledmatrix.renderFloatingText("абвгдеёжзиклмнопрстуфхцчшщьыъэюя", 5000, 400);
+	// ledmatrix.clearDisplay();
+	// ledmatrix.renderFloatingText("abcdefghijklmnopqrstuvwxyz+- ", 5000, 400);
 	connectToWiFi();
 
 	if (!getTime()) {

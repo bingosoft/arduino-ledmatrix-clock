@@ -1,8 +1,21 @@
 #ifndef LEDMATRIXCHARS_H
 #define LEDMATRIXCHARS_H
 
+// Small Latin Symbols
+
 namespace ledmatrix {
 	typedef unsigned char byte;
+
+	const static byte BOLVANKA[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B00000,
+		B00000,
+		B00000,
+		B00000,
+		B00000,
+	};
 
 	const static byte _0[8] = {
 		B01110,
@@ -114,7 +127,7 @@ namespace ledmatrix {
 		B01110,
 	};
 
-	const static byte A[8] = {
+	const static byte a[8] = {
 		0,0,0,
 		B1110,
 		B0001,
@@ -123,7 +136,7 @@ namespace ledmatrix {
 		B0111,
 	};
 
-	const static byte B[8] = {
+	const static byte b[8] = {
 		B0000,
 		B0000,
 		B0000,
@@ -134,7 +147,7 @@ namespace ledmatrix {
 		B1110,
 	};
 
-	const static byte C[8] = {
+	const static byte c[8] = {
 		B0000,
 		B0000,
 		B0000,
@@ -145,7 +158,7 @@ namespace ledmatrix {
 		B0111,
 	};
 
-	const static byte D[8] = {
+	const static byte d[8] = {
 		B0000,
 		B0000,
 		B0000,
@@ -156,7 +169,18 @@ namespace ledmatrix {
 		B0111,
 	};
 
-	const static byte F[8] = {
+	const static byte e[8] = {
+		B0000,
+		B0000,
+		B0000,
+		B0110,
+		B1001,
+		B1110,
+		B1000,
+		B0111,
+	};
+
+	const static byte f[8] = {
 		B00000,
 		B00000,
 		B00000,
@@ -167,18 +191,18 @@ namespace ledmatrix {
 		B01000,
 	};
 
-	const static byte G[8] = {
-		B0000,
-		B0000,
-		B0000,
-		B0101,
-		B1011,
-		B0101,
-		B0001,
-		B0110,
+	const static byte g[8] = {
+		B000,
+		B000,
+		B000,
+		B011,
+		B101,
+		B011,
+		B001,
+		B110,
 	};
 
-	const static byte H[8] = {
+	const static byte h[8] = {
 		B0000,
 		B0000,
 		B0000,
@@ -189,7 +213,7 @@ namespace ledmatrix {
 		B1001,
 	};
 
-	const static byte I[8] = {
+	const static byte i[8] = {
 		B0,
 		B0,
 		B1,
@@ -200,7 +224,7 @@ namespace ledmatrix {
 		B1,
 	};
 
-	const static byte J[8] = {
+	const static byte j[8] = {
 		B000,
 		B000,
 		B001,
@@ -211,7 +235,7 @@ namespace ledmatrix {
 		B010,
 	};
 
-	const static byte K[8] = {
+	const static byte k[8] = {
 		B0000,
 		B0000,
 		B1000,
@@ -222,7 +246,7 @@ namespace ledmatrix {
 		B1001,
 	};
 
-	const static byte L[8] = {
+	const static byte l[8] = {
 		B0000,
 		B0000,
 		B1100,
@@ -233,7 +257,7 @@ namespace ledmatrix {
 		B0010,
 	};
 
-	const static byte M[8] = {
+	const static byte m[8] = {
 		B00000,
 		B00000,
 		B00000,
@@ -244,7 +268,7 @@ namespace ledmatrix {
 		B10101,
 	};
 
-	const static byte N[8] = {
+	const static byte n[8] = {
 		B0000,
 		B0000,
 		B0000,
@@ -255,7 +279,29 @@ namespace ledmatrix {
 		B1001,
 	};
 
-	const static byte Q[8] = {
+	const static byte o[8] = {
+		B0000,
+		B0000,
+		B0000,
+		B0110,
+		B1001,
+		B1001,
+		B1001,
+		B0110,
+	};
+
+	const static byte p[8] = {
+		B0000,
+		B0000,
+		B0000,
+		B1110,
+		B1001,
+		B1110,
+		B1000,
+		B1000,
+	};
+
+	const static byte q[8] = {
 		B00000,
 		B00000,
 		B00000,
@@ -266,7 +312,7 @@ namespace ledmatrix {
 		B00001,
 	};
 
-	const static byte R[8] = {
+	const static byte r[8] = {
 		B00000,
 		B00000,
 		B00000,
@@ -277,7 +323,7 @@ namespace ledmatrix {
 		B10000,
 	};
 
-	const static byte S[8] = {
+	const static byte s[8] = {
 		B00000,
 		B00000,
 		B00000,
@@ -288,7 +334,7 @@ namespace ledmatrix {
 		B11110,
 	};
 
-	const static byte T[8] = {
+	const static byte t[8] = {
 		B0000,
 		B0000,
 		B0000,
@@ -299,7 +345,7 @@ namespace ledmatrix {
 		B0010,
 	};
 
-	const static byte U[8] = {
+	const static byte u[8] = {
 		B0000,
 		B0000,
 		B0000,
@@ -310,7 +356,7 @@ namespace ledmatrix {
 		B0110,
 	};
 
-	const static byte V[8] = {
+	const static byte v[8] = {
 		B00000,
 		B00000,
 		B00000,
@@ -321,7 +367,7 @@ namespace ledmatrix {
 		B00100,
 	};
 
-	const static byte W[8] = {
+	const static byte w[8] = {
 		B00000,
 		B00000,
 		B00000,
@@ -332,7 +378,29 @@ namespace ledmatrix {
 		B01010,
 	};
 
-	const static byte Z[8] = {
+	const static byte x[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B10001,
+		B01010,
+		B00100,
+		B01010,
+		B10001,
+	};
+
+	const static byte y[8] = {
+		B0000,
+		B0000,
+		B0000,
+		B1001,
+		B1001,
+		B0111,
+		B0001,
+		B1110,
+	};
+
+	const static byte z[8] = {
 		B00000,
 		B00000,
 		B00000,
@@ -341,347 +409,6 @@ namespace ledmatrix {
 		B00100,
 		B01000,
 		B11111,
-	};
-
-	const static byte BOLV[8] = {
-		B00000,
-		B00000,
-		B00000,
-		B00000,
-		B00000,
-		B00000,
-		B00000,
-		B00000,
-	};
-
-	const static byte Y[8] = {
-		B0000,
-		B0000,
-		B0000,
-		B1001,
-		B1001,
-		B0111,
-		B0001,
-		B1110,
-	};
-
-	const static byte P[8] = {
-		B0000,
-		B0000,
-		B0000,
-		B1110,
-		B1001,
-		B1110,
-		B1000,
-		B1000,
-	};
-
-	const static byte RUS_N[8] = {
-		B0000,
-		B0000,
-		B0000,
-		B1001,
-		B1001,
-		B1111,
-		B1001,
-		B1001,
-	};
-
-	const static byte O[8] = {
-		B0000,
-		B0000,
-		B0000,
-		B0110,
-		B1001,
-		B1001,
-		B1001,
-		B0110,
-	};
-
-	const static byte RUS_B[8] = {
-		B0000,
-		B0000,
-		B0000,
-		B1111,
-		B1000,
-		B1110,
-		B1001,
-		B1110,
-	};
-
-	const static byte RUS_V[8] = {
-		B0000,
-		B0000,
-		B0000,
-		B1110,
-		B1001,
-		B1110,
-		B1001,
-		B1110,
-	};
-
-	const static byte RUS_G[8] = {
-		B0000,
-		B0000,
-		B0000,
-		B1111,
-		B1000,
-		B1000,
-		B1000,
-		B1000,
-	};
-
-	const static byte RUS_D[8] = {
-		B00000,
-		B00000,
-		B00000,
-		B01110,
-		B01010,
-		B01010,
-		B11111,
-		B10001,
-	};
-
-	const static byte E[8] = {
-		B0000,
-		B0000,
-		B0000,
-		B0110,
-		B1001,
-		B1110,
-		B1000,
-		B0111,
-	};
-
-	const static byte ZH[8] = {
-		B00000,
-		B00000,
-		B00000,
-		B10101,
-		B01110,
-		B00100,
-		B01110,
-		B10101,
-	};
-
-	const static byte RUS_Z[8] = {
-		B0000,
-		B0000,
-		B0000,
-		B1110,
-		B0001,
-		B1110,
-		B0001,
-		B1110,
-	};
-
-	const static byte RUS_I[8] = {
-		B00000,
-		B00000,
-		B00000,
-		B10001,
-		B10011,
-		B10101,
-		B11001,
-		B10001,
-	};
-
-	const static byte IY[8] = {
-		B00000,
-		B01110,
-		B00000,
-		B10001,
-		B10011,
-		B10101,
-		B11001,
-		B10001,
-	};
-
-	const static byte RUS_K[8] = {
-		B0000,
-		B0000,
-		B0000,
-		B1001,
-		B1010,
-		B1100,
-		B1010,
-		B1001,
-	};
-
-	const static byte RUS_L[8] = {
-		B00000,
-		B00000,
-		B00000,
-		B01111,
-		B01001,
-		B01001,
-		B01001,
-		B10001,
-	};
-
-	const static byte RUS_M[8] = {
-		B00000,
-		B00000,
-		B00000,
-		B10001,
-		B11011,
-		B10101,
-		B10001,
-		B10001,
-	};
-
-	const static byte RUS_P[8] = {
-		B0000,
-		B0000,
-		B0000,
-		B1111,
-		B1001,
-		B1001,
-		B1001,
-		B1001,
-	};
-
-	const static byte RUS_T[8] = {
-		B00000,
-		B00000,
-		B00000,
-		B11111,
-		B00100,
-		B00100,
-		B00100,
-		B00100,
-	};
-
-	const static byte RUS_F[8] = {
-		B00000,
-		B00000,
-		B00100,
-		B01110,
-		B10101,
-		B01110,
-		B00100,
-		B00100,
-	};
-
-	const static byte X[8] = {
-		B00000,
-		B00000,
-		B00000,
-		B10001,
-		B01010,
-		B00100,
-		B01010,
-		B10001,
-	};
-
-	const static byte TS[8] = {
-		B00000,
-		B00000,
-		B00000,
-		B10010,
-		B10010,
-		B10010,
-		B11111,
-		B00001,
-	};
-
-	const static byte CH[8] = {
-		B0000,
-		B0000,
-		B0000,
-		B1001,
-		B1001,
-		B0111,
-		B0001,
-		B0001,
-	};
-
-	const static byte SH[8] = {
-		B00000,
-		B00000,
-		B00000,
-		B10001,
-		B10001,
-		B10101,
-		B10101,
-		B11111,
-	};
-
-	const static byte SCH[8] = {
-		B000000,
-		B000000,
-		B000000,
-		B100010,
-		B100010,
-		B101010,
-		B111111,
-		B000001,
-	};
-
-	const static byte HARDSIGN[8] = {
-		B00000,
-		B00000,
-		B00000,
-		B11000,
-		B01000,
-		B01110,
-		B01001,
-		B01110,
-	};
-
-	const static byte SOFTSIGN[8] = {
-		B0000,
-		B0000,
-		B0000,
-		B1000,
-		B1000,
-		B1110,
-		B1001,
-		B1110,
-	};
-
-	const static byte YE[8] = {
-		B0000,
-		B0000,
-		B0000,
-		B1110,
-		B0001,
-		B0111,
-		B0001,
-		B1110,
-	};
-
-	const static byte YU[8] = {
-		B00000,
-		B00000,
-		B00000,
-		B10010,
-		B10101,
-		B11101,
-		B10101,
-		B10010,
-	};
-
-	const static byte YA[8] = {
-		B0000,
-		B0000,
-		B0000,
-		B0111,
-		B1001,
-		B0111,
-		B0101,
-		B1001,
-	};
-
-	const static byte YI[8] = {
-		B00000,
-		B00000,
-		B00000,
-		B10001,
-		B10001,
-		B11001,
-		B10101,
-		B11001,
 	};
 
 	const static byte SPACE[8] = {
@@ -737,6 +464,296 @@ namespace ledmatrix {
 		B0,
 		B0,
 		B1,
+	};
+}
+
+// Small cyrillic chars
+
+namespace ledmatrix {
+	const static byte cyr_b[8] = {
+		B0000,
+		B0000,
+		B0000,
+		B1111,
+		B1000,
+		B1110,
+		B1001,
+		B1110,
+	};
+
+	const static byte cyr_v[8] = {
+		B0000,
+		B0000,
+		B0000,
+		B1110,
+		B1001,
+		B1110,
+		B1001,
+		B1110,
+	};
+
+	const static byte cyr_g[8] = {
+		B0000,
+		B0000,
+		B0000,
+		B1111,
+		B1000,
+		B1000,
+		B1000,
+		B1000,
+	};
+
+	const static byte cyr_d[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B01110,
+		B01010,
+		B01010,
+		B11111,
+		B10001,
+	};
+
+	const static byte cyr_yo[8] = {
+		B0000,
+		B1001,
+		B0000,
+		B0110,
+		B1001,
+		B1110,
+		B1000,
+		B0111,
+	};
+
+	const static byte cyr_zh[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B10101,
+		B01110,
+		B00100,
+		B01110,
+		B10101,
+	};
+
+	const static byte cyr_z[8] = {
+		B0000,
+		B0000,
+		B0000,
+		B1110,
+		B0001,
+		B1110,
+		B0001,
+		B1110,
+	};
+
+	const static byte cyr_i[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B10001,
+		B10011,
+		B10101,
+		B11001,
+		B10001,
+	};
+
+	const static byte cyr_iy[8] = {
+		B00000,
+		B01110,
+		B00000,
+		B10001,
+		B10011,
+		B10101,
+		B11001,
+		B10001,
+	};
+
+	const static byte cyr_k[8] = {
+		B0000,
+		B0000,
+		B0000,
+		B1001,
+		B1010,
+		B1100,
+		B1010,
+		B1001,
+	};
+
+	const static byte cyr_l[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B01111,
+		B01001,
+		B01001,
+		B01001,
+		B10001,
+	};
+
+	const static byte cyr_n[8] = {
+		B0000,
+		B0000,
+		B0000,
+		B1001,
+		B1001,
+		B1111,
+		B1001,
+		B1001,
+	};
+
+	const static byte cyr_m[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B10001,
+		B11011,
+		B10101,
+		B10001,
+		B10001,
+	};
+
+	const static byte cyr_p[8] = {
+		B0000,
+		B0000,
+		B0000,
+		B1111,
+		B1001,
+		B1001,
+		B1001,
+		B1001,
+	};
+
+	const static byte cyr_t[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B11111,
+		B00100,
+		B00100,
+		B00100,
+		B00100,
+	};
+
+	const static byte cyr_f[8] = {
+		B00000,
+		B00000,
+		B00100,
+		B01110,
+		B10101,
+		B01110,
+		B00100,
+		B00100,
+	};
+
+	const static byte cyr_ts[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B10010,
+		B10010,
+		B10010,
+		B11111,
+		B00001,
+	};
+
+	const static byte cyr_ch[8] = {
+		B0000,
+		B0000,
+		B0000,
+		B1001,
+		B1001,
+		B0111,
+		B0001,
+		B0001,
+	};
+
+	const static byte cyr_sh[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B10001,
+		B10001,
+		B10101,
+		B10101,
+		B11111,
+	};
+
+	const static byte cyr_sch[8] = {
+		B000000,
+		B000000,
+		B000000,
+		B100010,
+		B100010,
+		B101010,
+		B111111,
+		B000001,
+	};
+
+	const static byte cyr_hardsign[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B11000,
+		B01000,
+		B01110,
+		B01001,
+		B01110,
+	};
+
+	const static byte cyr_softsign[8] = {
+		B0000,
+		B0000,
+		B0000,
+		B1000,
+		B1000,
+		B1110,
+		B1001,
+		B1110,
+	};
+
+	const static byte cyr_ye[8] = {
+		B0000,
+		B0000,
+		B0000,
+		B1110,
+		B0001,
+		B0111,
+		B0001,
+		B1110,
+	};
+
+	const static byte cyr_yu[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B10010,
+		B10101,
+		B11101,
+		B10101,
+		B10010,
+	};
+
+	const static byte cyr_ya[8] = {
+		B0000,
+		B0000,
+		B0000,
+		B0111,
+		B1001,
+		B0111,
+		B0101,
+		B1001,
+	};
+
+	const static byte cyr_yi[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B10001,
+		B10001,
+		B11001,
+		B10101,
+		B11001,
 	};
 }
 

@@ -8,7 +8,7 @@ Application *a;
 void setup()
 {
 	Serial.begin(115200);
-	delay(3000);
+	delay(1000);
 	a = new Application(Config::d1Mini);
 }
 

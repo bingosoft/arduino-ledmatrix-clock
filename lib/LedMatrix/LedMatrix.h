@@ -2,6 +2,7 @@
 #define LedMatrix_h
 
 #include <Arduino.h>
+#include <CharMapping.h>
 
 class LedMatrix
 {
@@ -19,6 +20,7 @@ class LedMatrix
 	static const int sections = 4;
 	static const int lineInDots = 8 * sections;
 	bool state[sections * 8 * 8] = {}; // each led state
+	CharMapping mapping;
 
     void clearDisplay(int device);
     void shutdown(int device, bool status);
