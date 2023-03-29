@@ -46,6 +46,7 @@ void Weather::update() {
 		_windDirectionAngle = root["wind"]["deg"];
 		_timezoneSeconds = root["timezone"];
 	 	_description = (const char *)root["weather"][0]["description"];
+		_city = (const char *)root["name"];
 		Serial.printf("Current temperature %.1f\n", _temperature);
 		Serial.println("Weather description - " + _description);
 
