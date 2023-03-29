@@ -7,7 +7,9 @@
 class Weather
 {
 	float _temperature;
+	float _windSpeed;
 	int _humidity;
+	int _windDirectionAngle;
 	String _city;
 	String _description;
 	WiFiClient _client;
@@ -18,7 +20,9 @@ class Weather
 
 public:
 	const float &temperature;
+	const float &windSpeed;
 	const int &humidity;
+	const int &windDirectionAngle;
 	const String &city;
 	const String &description;
 

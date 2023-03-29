@@ -59,9 +59,6 @@ public:
 		items['8'] = DotsChar(_8);
 		items['9'] = DotsChar(_9);
 		items[' '] = DotsChar(SPACE);
-		items['+'] = DotsChar(PLUS);
-		items['-'] = DotsChar(MINUS);
-		items['_'] = DotsChar(UNDERSCORE);
 		items['a'] = DotsChar(a);
 		items['b'] = DotsChar(b);
 		items['c'] = DotsChar(c);
@@ -94,6 +91,10 @@ public:
 
 		items['°'] = DotsChar(DEGREE);
 		items['%'] = DotsChar(PERCENT);
+		items['/'] = DotsChar(SLASH);
+		items['+'] = DotsChar(PLUS);
+		items['-'] = DotsChar(MINUS);
+		items['_'] = DotsChar(UNDERSCORE);
 
 		// Cyrillic chars
 

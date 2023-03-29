@@ -16,7 +16,7 @@ class Application
 	GeoIP geoIP;
 	LedMatrix ledmatrix;
 	NTPClient ntpClient;
-	Timers<5> timers;
+	Timers<7> timers;
 	Config config;
 	bool dotVisible = false;
 
@@ -29,6 +29,7 @@ class Application
 	void displayCity();
 	void displayDescription();
 	void displayHumidity();
+	void displayWind();
 
 public:
 	Application(const Config &config);

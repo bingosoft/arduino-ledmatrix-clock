@@ -434,14 +434,14 @@ namespace ledmatrix {
 	};
 
 	const static byte MINUS[8] = {
-		B00000,
-		B00000,
-		B00000,
-		B00000,
-		B11111,
-		B00000,
-		B00000,
-		B00000,
+		B0000,
+		B0000,
+		B0000,
+		B0000,
+		B1111,
+		B0000,
+		B0000,
+		B0000,
 	};
 
 	const static byte UNDERSCORE[8] = {
@@ -453,6 +453,17 @@ namespace ledmatrix {
 		B00000,
 		B00000,
 		B11111,
+	};
+
+	const static byte SLASH[8] = {
+		B000,
+		B000,
+		B000,
+		B000,
+		B001,
+		B010,
+		B100,
+		B000,
 	};
 
 	const static byte DEGREE[8] = {

@@ -7,7 +7,9 @@
 
 Weather::Weather() :
 	temperature(_temperature),
+	windSpeed(_windSpeed),
 	humidity(_humidity),
+	windDirectionAngle(_windDirectionAngle),
 	city(_city),
 	description(_description)
 { }
@@ -38,8 +40,10 @@ void Weather::update() {
 		JsonObject& root = jsonBuffer.parseObject(response);
 		_temperature = root["main"]["temp"];
 		_humidity = root["main"]["humidity"];
-		Serial.printf("Current temperature %.1f\n", _temperature);
+		_windSpeed = root["wind"]["speed"];
+		_windDirectionAngle = root["wind"]["deg"];
 	 	_description = (const char *)root["weather"][0]["description"];
+		Serial.printf("Current temperature %.1f\n", _temperature);
 		Serial.println("Weather description - " + _description);
 	} else {
 		Serial.printf("Received bad HTTP response code %d\n", responseCode);

@@ -26,10 +26,11 @@ Application::Application(const Config &config) :
 }
 
 void Application::subscribeTimers() {
-	timers.schedule(30 * 1000, this, &Application::displayTemperature, 10000);
-	timers.schedule(30 * 1000, this, &Application::displayDescription, 20000);
-	timers.schedule(60 * 1000, this, &Application::displayHumidity, 25000);
+	timers.schedule(30 * 1000, this, &Application::displayTemperature, 5000);
+	timers.schedule(30 * 1000, this, &Application::displayDescription, 10000);
+	timers.schedule(60 * 1000, this, &Application::displayHumidity, 20000);
 	timers.schedule(5 * 60 * 1000, this, &Application::displayCity, 30000);
+	timers.schedule(60 * 1000, this, &Application::displayWind, 50000);
 	timers.schedule(config.weatherDataUpdateIntervalSeconds * 1000, &weather, &Weather::update);
 	timers.schedule(config.timeUpdateIntervalSeconds * 1000, &ntpClient, &NTPClient::getTime);
 }
@@ -158,6 +159,23 @@ void Application::displayHumidity()
 
 	ledmatrix.clearDisplay();
 	ledmatrix.renderFloatingText(humidity);
+	ledmatrix.clearDisplay();
+}
+
+void Application::displayWind()
+{
+	String directions[] = {"северный", "северо-восточный", "восточный", "юго-восточный", "южный", "юго-западный", "западный", "северо-западный"};
+	int index = std::lround(weather.windDirectionAngle * 8 / 360.0) % 8;
+	String direction = directions[index];
+
+	char windSpeed[4];
+	snprintf(windSpeed, sizeof(windSpeed), "%.1f", weather.windSpeed);
+
+	String wind = "ветер " + direction + " " + String(windSpeed) + " м/с";
+	Serial.printf("Displaying wind - %s\n", wind.c_str());
+
+	ledmatrix.clearDisplay();
+	ledmatrix.renderFloatingText(wind);
 	ledmatrix.clearDisplay();
 }
 
