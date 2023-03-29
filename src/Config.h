@@ -13,22 +13,14 @@ struct Config {
 
     static Config d1Mini;
 
-    Config(
-        String wifiNetwork,
-        String wifiPassword,
-        String ntpServerIP,
-        int dataInPin,
-        int clkPin,
-        int csPin
-    ) : wifiNetwork(wifiNetwork),
-        wifiPassword(wifiPassword),
-        ntpServerIP(ntpServerIP),
-        dataInPin(dataInPin),
-        clkPin(clkPin),
-        csPin(csPin)
+    Config() :
+        wifiNetwork(),
+        wifiPassword(),
+        ntpServerIP(),
+        dataInPin(13),
+        clkPin(14),
+        csPin(15)
     { }
-
-    Config() { }
 };
 
 #endif
