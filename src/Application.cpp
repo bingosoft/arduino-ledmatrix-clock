@@ -17,6 +17,8 @@ Application::Application(const Config &config) :
 		return;
 	}
 
+	weather.delegate = this;
+
 	if (getLocation()) {
 		weather.setLocation(geoIP.latitude, geoIP.longitude, geoIP.city);
 		weather.update();
@@ -42,7 +44,6 @@ bool Application::getTime() {
 
 	const int maxRetries = 4;
 	int retries = 0;
-	ntpClient.setTimeZone(60 * 60);
 
 	ledmatrix.turnLed(0, 1, true);
 	ntpClient.getTime();
@@ -186,4 +187,12 @@ void Application::exec()
 		displayTime();
 	}
 	delay(500);
+}
+
+// WeatherDelegate
+
+void Application::onWeatherUpdated()
+{
+	Serial.println("Weather updated");
+	ntpClient.setTimeZone(weather.timezoneSeconds);
 }

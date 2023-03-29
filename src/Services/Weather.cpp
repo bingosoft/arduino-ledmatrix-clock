@@ -10,8 +10,10 @@ Weather::Weather() :
 	windSpeed(_windSpeed),
 	humidity(_humidity),
 	windDirectionAngle(_windDirectionAngle),
+	timezoneSeconds(_timezoneSeconds),
 	city(_city),
-	description(_description)
+	description(_description),
+	delegate()
 { }
 
 void Weather::setLocation(const String &latitude, const String &longitude, const String &city) {
@@ -42,9 +44,14 @@ void Weather::update() {
 		_humidity = root["main"]["humidity"];
 		_windSpeed = root["wind"]["speed"];
 		_windDirectionAngle = root["wind"]["deg"];
+		_timezoneSeconds = root["timezone"];
 	 	_description = (const char *)root["weather"][0]["description"];
 		Serial.printf("Current temperature %.1f\n", _temperature);
 		Serial.println("Weather description - " + _description);
+
+		if (delegate) {
+			delegate->onWeatherUpdated();
+		}
 	} else {
 		Serial.printf("Received bad HTTP response code %d\n", responseCode);
 	}

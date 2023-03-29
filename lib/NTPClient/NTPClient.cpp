@@ -2,6 +2,7 @@
 #include <ESP8266WiFi.h>
 
 NTPClient::NTPClient(String ntpServerIP) :
+	timeZoneSeconds(),
 	ntpServerIP(ntpServerIP) 
 { }
 

@@ -9,7 +9,7 @@
 #include "Services/Weather.h"
 #include "Services/GeoIP.h"
 
-class Application
+class Application: WeatherDelegate
 {
 	const int messagesScrollDelay = 30;
 	Weather weather;
@@ -30,6 +30,9 @@ class Application
 	void displayDescription();
 	void displayHumidity();
 	void displayWind();
+
+	// WeatherDelegate methods
+	void onWeatherUpdated();
 
 public:
 	Application(const Config &config);
