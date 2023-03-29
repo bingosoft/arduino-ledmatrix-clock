@@ -16,10 +16,9 @@ Weather::Weather() :
 	delegate()
 { }
 
-void Weather::setLocation(const String &latitude, const String &longitude, const String &city) {
+void Weather::setLocation(const String &latitude, const String &longitude) {
 	this->latitude = latitude;
 	this->longitude = longitude;
-	_city = city;
 }
 
 void Weather::update() {

@@ -16,6 +16,11 @@ static Config makeDefaultConfig() {
     config.weatherDataUpdateIntervalSeconds = 3 * 60;
     config.timeUpdateIntervalSeconds = 30 * 60;
 
+    // If calculated GeoIP location is not precise you can override your location
+
+    // config.overrideLatitude = "55.485576";
+    // config.overrideLongitude = "28.768349";
+
     return config;
 }
 

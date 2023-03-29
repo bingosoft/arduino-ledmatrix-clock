@@ -19,8 +19,8 @@ class Weather
 	String _city;
 	String _description;
 	WiFiClient _client;
-	String longitude;
 	String latitude;
+	String longitude;
 	const String appId = "9542bcaedac315a65ddec8b335c4290b";
 	unsigned long lastUpdate = 0;
 
@@ -36,7 +36,7 @@ public:
 	WeatherDelegate *delegate;
 
 	Weather();
-	void setLocation(const String &longitude, const String &latitude, const String &city);
+	void setLocation(const String &longitude, const String &latitude);
 	void update();
 	int secondsSinceLastUpdate() const { return (millis() - lastUpdate) / 1000; }
 };

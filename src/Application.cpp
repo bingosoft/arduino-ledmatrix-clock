@@ -17,13 +17,17 @@ Application::Application(const Config &config) :
 		return;
 	}
 
+	ledmatrix.clearDisplay();
 	weather.delegate = this;
 
-	if (getLocation()) {
-		weather.setLocation(geoIP.latitude, geoIP.longitude, geoIP.city);
-		weather.update();
+	if (config.overrideLatitude && config.overrideLongitude) {
+		Serial.println("Having an overriden location in config, skipping GeoIP...");
+		weather.setLocation(*config.overrideLatitude, *config.overrideLongitude);
+	} else if (getLocation()) {
+		weather.setLocation(geoIP.latitude, geoIP.longitude);
 	}
 
+	weather.update();
 	subscribeTimers();
 }
 
@@ -95,7 +99,7 @@ void Application::connectToWiFi()
 		ledmatrix.turnLed(i % 32, i / 32, true);
 		++i;
 		Serial.print(".");
-		if (i >= 8) {
+		if (i >= 16) {
 			Serial.printf("\nNo response from access point\n");
 			i = 0;
 			WiFi.disconnect();
@@ -128,8 +132,8 @@ void Application::displayTime()
 void Application::displayTemperature()
 {
 	char temp[4];
-	snprintf(temp, sizeof(temp), "%.1f", weather.temperature);
-	String temperature = (weather.temperature > 0 ? "+" : "") + String(temp) + "°";
+	snprintf(temp, sizeof(temp), "%.1f", std::abs(weather.temperature));
+	String temperature = (weather.temperature > 0 ? "+" : "-") + String(temp) + "°";
 	Serial.printf("Displaying temperature - %s\n", temperature.c_str());
 
 	ledmatrix.clearDisplay();
