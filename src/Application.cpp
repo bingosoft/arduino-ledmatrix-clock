@@ -16,6 +16,7 @@ Application::Application(const Config &config) :
 	connectToWiFi();
 
 	if (!getTime()) {
+		ESP.reset();
 		return;
 	}
 
@@ -31,8 +32,8 @@ void Application::subscribeTimers() {
 	timers.schedule(30 * 1000, this, &Application::displayTemperature, 10000);
 	timers.schedule(30 * 1000, this, &Application::displayDescription, 20000);
 	timers.schedule(5 * 60 * 1000, this, &Application::displayCity, 30000);
-	timers.schedule(5 * 60 * 1000, &weather, &Weather::update);
-	timers.schedule(30 * 60 * 1000, &ntpClient, &NTPClient::getTime);
+	timers.schedule(config.weatherDataUpdateIntervalSeconds * 1000, &weather, &Weather::update);
+	timers.schedule(config.timeUpdateIntervalSeconds * 1000, &ntpClient, &NTPClient::getTime);
 }
 
 bool Application::getTime() {
@@ -56,7 +57,7 @@ bool Application::getTime() {
 	}
 
 	if (!ntpClient.hasTime()) {
-		ledmatrix.renderFloatingText("NTP error", 10000, messagesScrollDelay);
+		ledmatrix.renderFloatingText("NTP error", 5000, messagesScrollDelay);
 	}
 
 	return ntpClient.hasTime();
@@ -126,8 +127,9 @@ void Application::displayTime()
 
 void Application::displayTemperature()
 {
-	int t = weather.temperature;
-	String temperature = (t > 0 ? "+" : "") + String(t) + "°";
+	char temp[4];
+	snprintf(temp, sizeof(temp), "%.1f", weather.temperature);
+	String temperature = (weather.temperature > 0 ? "+" : "") + String(temp) + "°";
 	Serial.printf("Displaying temperature - %s\n", temperature.c_str());
 
 	ledmatrix.clearDisplay();

@@ -36,7 +36,7 @@ void Weather::update() {
 		DynamicJsonBuffer jsonBuffer(BUFFER_SIZE);
 		JsonObject& root = jsonBuffer.parseObject(response);
 		float t = root["main"]["temp"];
-		_temperature = t - 273.15;
+		_temperature = t + absoluteNull;
 		Serial.printf("Current temperature %f\n", t);
 	 	_description = (const char *)root["weather"][0]["description"];
 		Serial.println("Weather description - " + _description);

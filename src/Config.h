@@ -4,6 +4,8 @@
 #include <Arduino.h>
 
 struct Config {
+    u16 weatherDataUpdateIntervalSeconds;
+    u16 timeUpdateIntervalSeconds;
     String wifiNetwork;
     String wifiPassword;
     String ntpServerIP;
@@ -14,6 +16,8 @@ struct Config {
     static Config d1Mini;
 
     Config() :
+        weatherDataUpdateIntervalSeconds(),
+        timeUpdateIntervalSeconds(),
         wifiNetwork(),
         wifiPassword(),
         ntpServerIP(),

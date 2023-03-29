@@ -6,7 +6,8 @@
 
 class Weather
 {
-	int _temperature;
+	float _temperature;
+	const float absoluteNull = -273.15;
 	String _city;
 	WiFiClient _client;
 	String longitude;
@@ -16,7 +17,7 @@ class Weather
 	unsigned long lastUpdate = 0;
 
 public:
-	const int &temperature;
+	const float &temperature;
 	const String &city;
 	const String &description;
 
