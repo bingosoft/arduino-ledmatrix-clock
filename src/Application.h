@@ -28,8 +28,7 @@ class Application
 	void displayTemperature();
 	void displayCity();
 	void displayDescription();
-
-	void updateWeather() { weather.update(); }
+	void displayHumidity();
 
 public:
 	Application(const Config &config);

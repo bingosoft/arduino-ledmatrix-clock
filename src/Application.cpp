@@ -10,9 +10,6 @@ Application::Application(const Config &config) :
 	Serial.println("Init app...");
 
     ledmatrix.setIntensity(0);
-	// ledmatrix.renderFloatingText("абвгдеёжзиклмнопрстуфхцчшщьыъэюя", 5000, 400);
-	// ledmatrix.clearDisplay();
-	// ledmatrix.renderFloatingText("abcdefghijklmnopqrstuvwxyz+- ", 5000, 400);
 	connectToWiFi();
 
 	if (!getTime()) {
@@ -31,6 +28,7 @@ Application::Application(const Config &config) :
 void Application::subscribeTimers() {
 	timers.schedule(30 * 1000, this, &Application::displayTemperature, 10000);
 	timers.schedule(30 * 1000, this, &Application::displayDescription, 20000);
+	timers.schedule(60 * 1000, this, &Application::displayHumidity, 25000);
 	timers.schedule(5 * 60 * 1000, this, &Application::displayCity, 30000);
 	timers.schedule(config.weatherDataUpdateIntervalSeconds * 1000, &weather, &Weather::update);
 	timers.schedule(config.timeUpdateIntervalSeconds * 1000, &ntpClient, &NTPClient::getTime);
@@ -150,6 +148,16 @@ void Application::displayDescription()
 	Serial.printf("Displaying weather description %s\n", weather.description.c_str());
 	ledmatrix.clearDisplay();
 	ledmatrix.renderFloatingText(weather.description);
+	ledmatrix.clearDisplay();
+}
+
+void Application::displayHumidity()
+{
+	String humidity = "влажность " + String(weather.humidity) + "%";
+	Serial.printf("Displaying humidity - %s\n", humidity.c_str());
+
+	ledmatrix.clearDisplay();
+	ledmatrix.renderFloatingText(humidity);
 	ledmatrix.clearDisplay();
 }
 

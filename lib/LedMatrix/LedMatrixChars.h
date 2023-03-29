@@ -444,6 +444,17 @@ namespace ledmatrix {
 		B00000,
 	};
 
+	const static byte UNDERSCORE[8] = {
+		B00000,
+		B00000,
+		B00000,
+		B00000,
+		B00000,
+		B00000,
+		B00000,
+		B11111,
+	};
+
 	const static byte DEGREE[8] = {
 		B010,
 		B101,
@@ -453,6 +464,17 @@ namespace ledmatrix {
 		B000,
 		B000,
 		B000,
+	};
+
+	const static byte PERCENT[8] = {
+		B010000,
+		B101001,
+		B010010,
+		B000100,
+		B001000,
+		B010010,
+		B100101,
+		B000010,
 	};
 
 	const static byte DOT[8] = {

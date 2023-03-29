@@ -61,6 +61,7 @@ public:
 		items[' '] = DotsChar(SPACE);
 		items['+'] = DotsChar(PLUS);
 		items['-'] = DotsChar(MINUS);
+		items['_'] = DotsChar(UNDERSCORE);
 		items['a'] = DotsChar(a);
 		items['b'] = DotsChar(b);
 		items['c'] = DotsChar(c);
@@ -87,8 +88,12 @@ public:
 		items['x'] = DotsChar(x);
 		items['y'] = DotsChar(y);
 		items['z'] = DotsChar(z);
-		items['°'] = DotsChar(DEGREE);
 		items['.'] = DotsChar(DOT);
+
+		// Special symbols
+
+		items['°'] = DotsChar(DEGREE);
+		items['%'] = DotsChar(PERCENT);
 
 		// Cyrillic chars
 

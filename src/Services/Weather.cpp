@@ -7,6 +7,7 @@
 
 Weather::Weather() :
 	temperature(_temperature),
+	humidity(_humidity),
 	city(_city),
 	description(_description)
 { }
@@ -22,7 +23,7 @@ void Weather::update() {
 	Serial.println("Update weather for the current location");
 
 	HTTPClient http;
-	String url = "http://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&lon=" + longitude + "&appid=" + appId + "&lang=ru";
+	String url = "http://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&lon=" + longitude + "&appid=" + appId + "&lang=ru&units=metric";
 	Serial.println(url);
 	http.begin(_client, url);
 
@@ -35,9 +36,9 @@ void Weather::update() {
 		const size_t BUFFER_SIZE = 1024;
 		DynamicJsonBuffer jsonBuffer(BUFFER_SIZE);
 		JsonObject& root = jsonBuffer.parseObject(response);
-		float t = root["main"]["temp"];
-		_temperature = t + absoluteNull;
-		Serial.printf("Current temperature %f\n", t);
+		_temperature = root["main"]["temp"];
+		_humidity = root["main"]["humidity"];
+		Serial.printf("Current temperature %.1f\n", _temperature);
 	 	_description = (const char *)root["weather"][0]["description"];
 		Serial.println("Weather description - " + _description);
 	} else {

@@ -43,6 +43,7 @@ public:
 	void renderString(const String &s, int position = 0);
 	void renderFloatingText(const String &s, int startDelay = 1000, int speedDelay = 50);
 	void turnLed(int position, int row, bool on);
+	void renderAllSupportedSymbols();
 };
 
 #endif

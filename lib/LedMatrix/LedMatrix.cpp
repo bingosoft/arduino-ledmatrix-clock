@@ -222,3 +222,10 @@ void LedMatrix::renderFloatingText(const String &s, int startDelay, int speedDel
 		}
 	} while (pos == 0 || !allRendered);
 }
+
+void LedMatrix::renderAllSupportedSymbols()
+{
+	renderFloatingText("абвгдеёжзиклмнопрстуфхцчшщьыъэюя", 5000, 400);
+	clearDisplay();
+	renderFloatingText("abcdefghijklmnopqrstuvwxyz+- _%.", 5000, 400);
+}
