@@ -1,6 +1,7 @@
 #include "Application.h"
 #include <NTPClient.h>
 #include <ESP8266WiFi.h>
+#include "Utils/Formatter.h"
 
 Application::Application(const Config &config) :
 	ledmatrix(config.dataInPin, config.clkPin, config.csPin),
@@ -131,9 +132,7 @@ void Application::displayTime()
 
 void Application::displayTemperature()
 {
-	char temp[4];
-	snprintf(temp, sizeof(temp), "%.1f", std::abs(weather.temperature));
-	String temperature = (weather.temperature > 0 ? "+" : "-") + String(temp) + "°";
+	String temperature = (weather.temperature > 0 ? "+" : "-") + Formatter::format("%.1f", std::abs(weather.temperature)) + "°";
 	Serial.printf("Displaying temperature - %s\n", temperature.c_str());
 
 	ledmatrix.clearDisplay();
@@ -172,11 +171,8 @@ void Application::displayWind()
 	String directions[] = {"северный", "северо-восточный", "восточный", "юго-восточный", "южный", "юго-западный", "западный", "северо-западный"};
 	int index = std::lround(weather.windDirectionAngle * 8 / 360.0) % 8;
 	String direction = directions[index];
-
-	char windSpeed[4];
-	snprintf(windSpeed, sizeof(windSpeed), "%.1f", weather.windSpeed);
-
-	String wind = "ветер " + direction + " " + String(windSpeed) + " м/с";
+	String windSpeed = Formatter::format("%.1f", weather.windSpeed);
+	String wind = "ветер " + direction + " " + windSpeed + " м/с";
 	Serial.printf("Displaying wind - %s\n", wind.c_str());
 
 	ledmatrix.clearDisplay();

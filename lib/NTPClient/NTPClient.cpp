@@ -52,7 +52,7 @@ void NTPClient::getTime()
 	// print Unix time:
 	lastUpdated = millis();
 	// print the hour, minute and second:
-	Serial.printf("The current time is %02d:%02d:%02d\n", hours(), minutes(), seconds());
+	Serial.printf("The current time is %02d:%02d:%02d GMT+0\n", hours(), minutes(), seconds());
 	udp.stop();
 }
 
