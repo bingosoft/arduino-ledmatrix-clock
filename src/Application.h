@@ -8,15 +8,17 @@
 #include "Config.h"
 #include "Services/Weather.h"
 #include "Services/GeoIP.h"
+#include "Services/Thermometer.h"
 
 class Application: WeatherDelegate
 {
 	const int messagesScrollDelay = 30;
+	IThermometer *thermometer;
 	Weather weather;
 	GeoIP geoIP;
 	LedMatrix ledmatrix;
 	NTPClient ntpClient;
-	Timers<7> timers;
+	Timers<9> timers;
 	Config config;
 	bool dotVisible = false;
 
@@ -26,9 +28,11 @@ class Application: WeatherDelegate
 	bool getLocation();
 	void displayTime();
 	void displayTemperature();
+	void displayTemperatureInRoom();
 	void displayCity();
 	void displayDescription();
 	void displayHumidity();
+	void displayHumidityInRoom();
 	void displayWind();
 
 	// WeatherDelegate methods

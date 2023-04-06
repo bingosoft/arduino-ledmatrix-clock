@@ -10,6 +10,7 @@ Application::Application(const Config &config) :
 {
 	Serial.println("Init app...");
 
+	thermometer = new DHT20Thermometer();
     ledmatrix.setIntensity(0);
 	connectToWiFi();
 
@@ -34,8 +35,18 @@ Application::Application(const Config &config) :
 
 void Application::subscribeTimers() {
 	timers.schedule(30 * 1000, this, &Application::displayTemperature, 5000);
-	timers.schedule(30 * 1000, this, &Application::displayDescription, 10000);
+
+	if (thermometer->isConnected()) {
+		timers.schedule(30 * 1000, this, &Application::displayTemperatureInRoom, 10000);
+	}
+
+	timers.schedule(30 * 1000, this, &Application::displayDescription, 15000);
 	timers.schedule(60 * 1000, this, &Application::displayHumidity, 20000);
+
+	if (thermometer->isConnected()) {
+		timers.schedule(60 * 1000, this, &Application::displayHumidityInRoom, 25000);
+	}
+
 	timers.schedule(5 * 60 * 1000, this, &Application::displayCity, 30000);
 	timers.schedule(60 * 1000, this, &Application::displayWind, 50000);
 	timers.schedule(config.weatherDataUpdateIntervalSeconds * 1000, &weather, &Weather::update);
@@ -132,11 +143,22 @@ void Application::displayTime()
 
 void Application::displayTemperature()
 {
-	String temperature = (weather.temperature > 0 ? "+" : "-") + Formatter::format("%.1f", std::abs(weather.temperature)) + "°";
+	String temperature = (weather.temperature > 0 ? "+" : weather.temperature < 0 ? "-" : "") + Formatter::format("%.1f", std::abs(weather.temperature)) + "°";
 	Serial.printf("Displaying temperature - %s\n", temperature.c_str());
 
 	ledmatrix.clearDisplay();
 	ledmatrix.renderStringInCenter(temperature, 5000);
+	ledmatrix.clearDisplay();
+}
+
+void Application::displayTemperatureInRoom()
+{
+	float temp = thermometer->getTemperature();
+	String temperature = String("внутри ") + (temp > 0 ? "+" : temp < 0 ? "-" : "") + Formatter::format("%.1f", std::abs(temp)) + "°";
+	Serial.printf("Displaying temperature in room - %s\n", temperature.c_str());
+
+	ledmatrix.clearDisplay();
+	ledmatrix.renderFloatingText(temperature);
 	ledmatrix.clearDisplay();
 }
 
@@ -160,6 +182,16 @@ void Application::displayHumidity()
 {
 	String humidity = "влажность " + String(weather.humidity) + "%";
 	Serial.printf("Displaying humidity - %s\n", humidity.c_str());
+
+	ledmatrix.clearDisplay();
+	ledmatrix.renderFloatingText(humidity);
+	ledmatrix.clearDisplay();
+}
+
+void Application::displayHumidityInRoom()
+{
+	String humidity = "влaжн. внутри " + String(std::lround(thermometer->getHumidity())) + "%";
+	Serial.printf("Displaying humidity inside room - %s\n", humidity.c_str());
 
 	ledmatrix.clearDisplay();
 	ledmatrix.renderFloatingText(humidity);
