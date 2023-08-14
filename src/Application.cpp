@@ -3,7 +3,7 @@
 #include <ESP8266WiFi.h>
 #include "Utils/Formatter.h"
 
-Application::Application(const Config &config) :
+Application::Application(const App::Config &config) :
 	ledmatrix(config.dataInPin, config.clkPin, config.csPin),
 	ntpClient(NTPClient(config.ntpServerIP)),
 	config(config)

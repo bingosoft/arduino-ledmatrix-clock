@@ -19,7 +19,7 @@ class Application: WeatherDelegate
 	LedMatrix ledmatrix;
 	NTPClient ntpClient;
 	Timers<9> timers;
-	Config config;
+	App::Config config;
 	bool dotVisible = false;
 
 	void subscribeTimers();
@@ -39,7 +39,7 @@ class Application: WeatherDelegate
 	void onWeatherUpdated();
 
 public:
-	Application(const Config &config);
+	Application(const App::Config &config);
 	void exec();
 };
 
