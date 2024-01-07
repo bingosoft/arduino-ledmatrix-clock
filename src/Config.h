@@ -10,6 +10,7 @@ namespace App {
         int dataInPin;
         int clkPin;
         int csPin;
+        bool hasThermometerSensor;
         String wifiNetwork;
         String wifiPassword;
         String ntpServerIP;
@@ -24,6 +25,7 @@ namespace App {
             dataInPin(13),
             clkPin(14),
             csPin(15),
+            hasThermometerSensor(false),
             wifiNetwork(),
             wifiPassword(),
             ntpServerIP()
