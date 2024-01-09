@@ -12,7 +12,6 @@
 
 class Application: WeatherDelegate
 {
-	const int messagesScrollDelay = 30;
 	IThermometer *thermometer;
 	Weather weather;
 	GeoIP geoIP;

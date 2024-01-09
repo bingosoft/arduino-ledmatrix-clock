@@ -151,11 +151,11 @@ namespace ledmatrix {
 		B0000,
 		B0000,
 		B0000,
-		B0111,
+		B0110,
+		B1001,
 		B1000,
-		B1000,
-		B1000,
-		B0111,
+		B1001,
+		B0110,
 	};
 
 	const static byte d[8] = {
@@ -181,14 +181,14 @@ namespace ledmatrix {
 	};
 
 	const static byte f[8] = {
-		B00000,
-		B00000,
-		B00000,
-		B00110,
-		B01001,
-		B11100,
-		B01000,
-		B01000,
+		B0000,
+		B0000,
+		B0000,
+		B0011,
+		B0100,
+		B1110,
+		B0100,
+		B0100,
 	};
 
 	const static byte g[8] = {
@@ -302,36 +302,36 @@ namespace ledmatrix {
 	};
 
 	const static byte q[8] = {
-		B00000,
-		B00000,
-		B00000,
-		B01101,
-		B10011,
-		B10011,
-		B01101,
-		B00001,
+		B0000,
+		B0000,
+		B0000,
+		B0101,
+		B1011,
+		B0101,
+		B0001,
+		B0001,
 	};
 
 	const static byte r[8] = {
-		B00000,
-		B00000,
-		B00000,
-		B10110,
-		B11001,
-		B10000,
-		B10000,
-		B10000,
+		B0000,
+		B0000,
+		B0000,
+		B1010,
+		B1101,
+		B1000,
+		B1000,
+		B1000,
 	};
 
 	const static byte s[8] = {
-		B00000,
-		B00000,
-		B00000,
-		B01111,
-		B10000,
-		B01110,
-		B00001,
-		B11110,
+		B0000,
+		B0000,
+		B0000,
+		B0111,
+		B1000,
+		B0110,
+		B0001,
+		B1110,
 	};
 
 	const static byte t[8] = {
@@ -615,8 +615,8 @@ namespace ledmatrix {
 
 	const static byte cyr_iy[8] = {
 		B00000,
-		B01110,
-		B00000,
+		B01010,
+		B00100,
 		B10001,
 		B10011,
 		B10101,
@@ -757,14 +757,14 @@ namespace ledmatrix {
 	};
 
 	const static byte cyr_softsign[8] = {
-		B0000,
-		B0000,
-		B0000,
-		B1000,
-		B1000,
-		B1110,
-		B1001,
-		B1110,
+		B000,
+		B000,
+		B000,
+		B100,
+		B100,
+		B110,
+		B101,
+		B110,
 	};
 
 	const static byte cyr_ye[8] = {
@@ -811,6 +811,5 @@ namespace ledmatrix {
 		B11001,
 	};
 }
-
 
 #endif

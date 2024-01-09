@@ -59,7 +59,7 @@ void Application::subscribeTimers() {
 
 bool Application::getTime() {
 	Serial.println("Getting time...");
-	ledmatrix.renderFloatingText("Getting time...", 1000, messagesScrollDelay);
+	ledmatrix.renderFloatingText("Getting time...", config.floatingTextStartDelay, config.floatingTextMovingDelay);
 	ledmatrix.clearDisplay();
 
 	const int maxRetries = 4;
@@ -77,7 +77,7 @@ bool Application::getTime() {
 	}
 
 	if (!ntpClient.hasTime()) {
-		ledmatrix.renderFloatingText("NTP error", 5000, messagesScrollDelay);
+		ledmatrix.renderFloatingText("NTP error", 5000, config.floatingTextMovingDelay);
 	}
 
 	return ntpClient.hasTime();
@@ -85,16 +85,16 @@ bool Application::getTime() {
 
 bool Application::getLocation() {
 	Serial.println("Getting location...");
-	ledmatrix.renderFloatingText("Getting location...", 1000, messagesScrollDelay);
+	ledmatrix.renderFloatingText("Getting location...", config.floatingTextStartDelay, config.floatingTextMovingDelay);
 	geoIP.getLocation();
 	
 	if (geoIP.hasLocation) {
-		ledmatrix.renderFloatingText(geoIP.country, 1000, messagesScrollDelay);
+		ledmatrix.renderFloatingText(geoIP.country, config.floatingTextStartDelay, config.floatingTextMovingDelay);
 		ledmatrix.clearDisplay();
-		ledmatrix.renderFloatingText(geoIP.city, 1000, messagesScrollDelay);
+		ledmatrix.renderFloatingText(geoIP.city, config.floatingTextStartDelay, config.floatingTextMovingDelay);
 		ledmatrix.clearDisplay();
 	} else {
-		ledmatrix.renderFloatingText("Error getting location", 1000, messagesScrollDelay);
+		ledmatrix.renderFloatingText("Error getting location", config.floatingTextStartDelay, config.floatingTextMovingDelay);
 	}
 
 	return geoIP.hasLocation;
@@ -104,8 +104,8 @@ void Application::connectToWiFi()
 {
 	Serial.printf("Connecting to Wi-Fi network %s, password %s\n", config.wifiNetwork.c_str(), config.wifiPassword.c_str());
 
-	ledmatrix.renderFloatingText("Connecting...", 1000, messagesScrollDelay);
-	ledmatrix.renderFloatingText(config.wifiNetwork, 1000, messagesScrollDelay);
+	ledmatrix.renderFloatingText("Connecting...", config.floatingTextStartDelay, config.floatingTextMovingDelay);
+	ledmatrix.renderFloatingText(config.wifiNetwork, config.floatingTextStartDelay, config.floatingTextMovingDelay);
 	ledmatrix.clearDisplay();
 
 	int i = 0;
@@ -175,7 +175,7 @@ void Application::displayTemperatureInRoom()
 	Serial.printf("Displaying temperature in room - %s\n", temperature.c_str());
 
 	ledmatrix.clearDisplay();
-	ledmatrix.renderFloatingText(temperature);
+	ledmatrix.renderFloatingText(temperature, config.floatingTextStartDelay, config.floatingTextMovingDelay);
 	ledmatrix.clearDisplay();
 }
 
@@ -183,7 +183,7 @@ void Application::displayCity()
 {
 	Serial.printf("Displaying city %s\n", weather.city.c_str());
 	ledmatrix.clearDisplay();
-	ledmatrix.renderFloatingText(weather.city);
+	ledmatrix.renderFloatingText(weather.city, config.floatingTextStartDelay, config.floatingTextMovingDelay);
 	ledmatrix.clearDisplay();
 }
 
@@ -191,7 +191,7 @@ void Application::displayDescription()
 {
 	Serial.printf("Displaying weather description %s\n", weather.description.c_str());
 	ledmatrix.clearDisplay();
-	ledmatrix.renderFloatingText(weather.description);
+	ledmatrix.renderFloatingText(weather.description, config.floatingTextStartDelay, config.floatingTextMovingDelay);
 	ledmatrix.clearDisplay();
 }
 
@@ -201,7 +201,7 @@ void Application::displayHumidity()
 	Serial.printf("Displaying humidity - %s\n", humidity.c_str());
 
 	ledmatrix.clearDisplay();
-	ledmatrix.renderFloatingText(humidity);
+	ledmatrix.renderFloatingText(humidity, config.floatingTextStartDelay, config.floatingTextMovingDelay);
 	ledmatrix.clearDisplay();
 }
 
@@ -211,7 +211,7 @@ void Application::displayHumidityInRoom()
 	Serial.printf("Displaying humidity inside room - %s\n", humidity.c_str());
 
 	ledmatrix.clearDisplay();
-	ledmatrix.renderFloatingText(humidity);
+	ledmatrix.renderFloatingText(humidity, config.floatingTextStartDelay, config.floatingTextMovingDelay);
 	ledmatrix.clearDisplay();
 }
 
@@ -225,7 +225,7 @@ void Application::displayWind()
 	Serial.printf("Displaying wind - %s\n", wind.c_str());
 
 	ledmatrix.clearDisplay();
-	ledmatrix.renderFloatingText(wind);
+	ledmatrix.renderFloatingText(wind, config.floatingTextStartDelay, config.floatingTextMovingDelay);
 	ledmatrix.clearDisplay();
 }
 

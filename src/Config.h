@@ -7,6 +7,8 @@ namespace App {
     struct Config {
         u16 weatherDataUpdateIntervalSeconds;
         u16 timeUpdateIntervalSeconds;
+        u16 floatingTextMovingDelay;
+        u16 floatingTextStartDelay;
         int dataInPin;
         int clkPin;
         int csPin;
