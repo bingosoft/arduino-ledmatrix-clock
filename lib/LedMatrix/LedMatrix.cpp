@@ -135,7 +135,7 @@ int LedMatrix::renderChar(int c, int position, bool updateDisplay)
 	auto info = mapping.getDotsByChar(c);
 
 	if (!info.has_value()) {
-		Serial.printf("Char %c not found, skip rendering\n", (char)c);
+		Serial.printf("Char %c (value: %d) not found, skip rendering\n", (char)c, c);
 		return 0;
 	}
 
@@ -175,7 +175,11 @@ void LedMatrix::renderString(const String &s, int position)
 		if ((c & 0xE0) == 0xC0) { // 2 bytes
 			c = s[i] << 8 | s[i + 1];
 			++i;
+		} else if ((c & 0xF0) == 0xE0) { // 3 bytes
+			c = s[i] << 16 | s[i + 1] << 8 | s[i + 2];
+			i += 2;
 		}
+
 		int charWidth = renderChar(c, position, false);
 		position += charWidth + 1;
 
@@ -227,5 +231,5 @@ void LedMatrix::renderAllSupportedSymbols()
 {
 	renderFloatingText("абвгдеёжзиклмнопрстуфхцчшщьыъэюя", 5000, 400);
 	clearDisplay();
-	renderFloatingText("abcdefghijklmnopqrstuvwxyz+- _%.", 5000, 400);
+	renderFloatingText("abcdefghijklmnopqrstuvwxyz+- /°_%.↑↓", 5000, 400);
 }

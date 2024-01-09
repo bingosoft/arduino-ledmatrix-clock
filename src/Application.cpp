@@ -147,7 +147,20 @@ void Application::displayTime()
 
 void Application::displayTemperature()
 {
-	String temperature = (weather.temperature > 0 ? "+" : weather.temperature < 0 ? "-" : "") + Formatter::format("%.1f", std::abs(weather.temperature)) + "°";
+	String temperatureDiffSign = "";
+
+	switch (weather.weatherDiffDirection) {
+	case Weather::WeatherTemperatureDiffDirection::raising:
+		temperatureDiffSign = "↑";
+		break;
+	case Weather::WeatherTemperatureDiffDirection::falling:
+		temperatureDiffSign = "↓";
+		break;
+	default:
+		break;
+	}
+
+	String temperature = temperatureDiffSign + (weather.temperature > 0 ? "+" : weather.temperature < 0 ? "-" : "") + Formatter::format("%.1f", std::abs(weather.temperature)) + "°";
 	Serial.printf("Displaying temperature - %s\n", temperature.c_str());
 
 	ledmatrix.clearDisplay();

@@ -13,6 +13,7 @@ Weather::Weather() :
 	timezoneSeconds(_timezoneSeconds),
 	city(_city),
 	description(_description),
+	weatherDiffDirection(_weatherDiffDirection),
 	delegate()
 { }
 
@@ -22,7 +23,6 @@ void Weather::setLocation(const String &latitude, const String &longitude) {
 }
 
 void Weather::update() {
-	lastUpdate = millis();
 	Serial.println("Update weather for the current location");
 
 	HTTPClient http;
@@ -39,7 +39,21 @@ void Weather::update() {
 		const size_t BUFFER_SIZE = 1024;
 		DynamicJsonBuffer jsonBuffer(BUFFER_SIZE);
 		JsonObject& root = jsonBuffer.parseObject(response);
-		_temperature = root["main"]["temp"];
+		float newTemperature = root["main"]["temp"];
+
+		if (lastUpdate > 0) {
+			Serial.printf("Previous temperature %.1f, new - %.1f\n", _temperature, newTemperature);
+
+			if (newTemperature > _temperature) {
+				weatherDiffDirection = WeatherTemperatureDiffDirection::raising;
+			} else if (newTemperature < _temperature) {
+				weatherDiffDirection = WeatherTemperatureDiffDirection::falling;
+			} else {
+				weatherDiffDirection = WeatherTemperatureDiffDirection::notChanged;
+			}
+		}
+
+		_temperature = newTemperature;
 		_humidity = root["main"]["humidity"];
 		_windSpeed = root["wind"]["speed"];
 		_windDirectionAngle = root["wind"]["deg"];
@@ -56,4 +70,5 @@ void Weather::update() {
 		Serial.printf("Received bad HTTP response code %d\n", responseCode);
 	}
 	http.end();
+	lastUpdate = millis();
 }

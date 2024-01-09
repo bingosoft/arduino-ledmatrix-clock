@@ -498,6 +498,28 @@ namespace ledmatrix {
 		B0,
 		B1,
 	};
+
+	const static byte ARROW_UP[8] = {
+		B000,
+		B000,
+		B010,
+		B111,
+		B010,
+		B010,
+		B010,
+		B000,
+	};
+
+	const static byte ARROW_DOWN[8] = {
+		B000,
+		B000,
+		B010,
+		B010,
+		B010,
+		B111,
+		B010,
+		B000,
+	};
 }
 
 // Small cyrillic chars

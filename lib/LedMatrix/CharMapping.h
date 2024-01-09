@@ -95,6 +95,8 @@ public:
 		items['+'] = DotsChar(PLUS);
 		items['-'] = DotsChar(MINUS);
 		items['_'] = DotsChar(UNDERSCORE);
+		items['↑'] = DotsChar(ARROW_UP);
+		items['↓'] = DotsChar(ARROW_DOWN);
 
 		// Cyrillic chars
 

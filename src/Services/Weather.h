@@ -11,6 +11,14 @@ public:
 
 class Weather
 {
+public:
+	enum WeatherTemperatureDiffDirection {
+		notChanged,
+		raising,
+		falling
+	};
+
+private:
 	float _temperature;
 	float _windSpeed;
 	int _humidity;
@@ -23,6 +31,7 @@ class Weather
 	String longitude;
 	const String appId = "9542bcaedac315a65ddec8b335c4290b";
 	unsigned long lastUpdate = 0;
+	WeatherTemperatureDiffDirection _weatherDiffDirection = WeatherTemperatureDiffDirection::notChanged;
 
 public:
 	const float &temperature;
@@ -32,6 +41,7 @@ public:
 	const int &timezoneSeconds;
 	const String &city;
 	const String &description;
+	WeatherTemperatureDiffDirection &weatherDiffDirection;
 
 	WeatherDelegate *delegate;
 
