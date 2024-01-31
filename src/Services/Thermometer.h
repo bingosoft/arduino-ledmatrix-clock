@@ -3,7 +3,8 @@
 
 class IThermometer {
 public:
-    virtual bool isConnected() const = 0;
+    bool isConnected;
+
     virtual float getTemperature() = 0;
     virtual float getHumidity() = 0;
 };
@@ -14,9 +15,10 @@ class DHT20Thermometer: public IThermometer {
 
     void read();
 public:
+    const bool &isConnected;
+
     DHT20Thermometer();
 
-    bool isConnected() const;
     float getTemperature();
     float getHumidity();
 };

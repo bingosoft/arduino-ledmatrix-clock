@@ -4,16 +4,12 @@
 #include "Utils/Formatter.h"
 
 Application::Application(const App::Config &config) :
-	thermometer(NULL),
+	thermometer(new DHT20Thermometer()),
 	ledmatrix(config.dataInPin, config.clkPin, config.csPin),
 	ntpClient(NTPClient(config.ntpServerIP)),
 	config(config)
 {
 	Serial.println("Init app...");
-
-	if (config.hasThermometerSensor) {
-		thermometer = new DHT20Thermometer();
-	}
 
     ledmatrix.setIntensity(0);
 	connectToWiFi();
@@ -40,14 +36,14 @@ Application::Application(const App::Config &config) :
 void Application::subscribeTimers() {
 	timers.schedule(30 * 1000, this, &Application::displayTemperature, 5000);
 
-	if (thermometer && thermometer->isConnected()) {
+	if (thermometer && thermometer->isConnected) {
 		timers.schedule(30 * 1000, this, &Application::displayTemperatureInRoom, 10000);
 	}
 
 	timers.schedule(30 * 1000, this, &Application::displayDescription, 15000);
 	timers.schedule(60 * 1000, this, &Application::displayHumidity, 20000);
 
-	if (thermometer && thermometer->isConnected()) {
+	if (thermometer && thermometer->isConnected) {
 		timers.schedule(60 * 1000, this, &Application::displayHumidityInRoom, 25000);
 	}
 

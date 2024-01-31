@@ -11,8 +11,8 @@ namespace App {
         static_assert(std::string_view(WIFI_SSID) != "WIFI_SSID_NAME", "Please define your WiFi SSID and password in Config.cpp:3");
         static_assert(std::string_view(WIFI_PASSWORD) != "WIFI_PASSWORD", "Please define your WiFi SSID and password in Config.cpp:4");
 
-        config.floatingTextMovingDelay = 35;
-        config.floatingTextStartDelay = 800;
+        config.floatingTextMovingDelay = 30;
+        config.floatingTextStartDelay = 700;
         config.wifiNetwork = WIFI_SSID;
         config.wifiPassword = WIFI_PASSWORD;
         config.ntpServerIP = "142.132.210.78";

@@ -1,20 +1,18 @@
 #include "Thermometer.h"
 
 DHT20Thermometer::DHT20Thermometer()
+    : isConnected(_isConnected)
 {
-    dht.begin();
-    read();
+    _isConnected = dht.begin();
 
-    if (isConnected()) {
+    Serial.printf("DHT20 thermometer is connected - %d\n", _isConnected);
+
+    if (isConnected) {
+        read();
 		Serial.println("Room thermometer DHT20 is connected");
     } else {
 		Serial.println("Room thermometer feature is disabled - device is not connected");
     }
-}
-
-bool DHT20Thermometer::isConnected() const
-{
-    return _isConnected;
 }
 
 float DHT20Thermometer::getTemperature()
