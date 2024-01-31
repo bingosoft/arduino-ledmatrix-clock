@@ -34,7 +34,7 @@ Application::Application(const App::Config &config) :
 }
 
 void Application::subscribeTimers() {
-	timers.schedule(30 * 1000, this, &Application::displayTemperature, 5000);
+	timers.schedule(20 * 1000, this, &Application::displayTemperature, 5000);
 
 	if (thermometer && thermometer->isConnected) {
 		timers.schedule(30 * 1000, this, &Application::displayTemperatureInRoom, 10000);
@@ -44,7 +44,7 @@ void Application::subscribeTimers() {
 	timers.schedule(60 * 1000, this, &Application::displayHumidity, 20000);
 
 	if (thermometer && thermometer->isConnected) {
-		timers.schedule(60 * 1000, this, &Application::displayHumidityInRoom, 25000);
+		timers.schedule(60 * 1000, this, &Application::displayHumidityInRoom, 35000);
 	}
 
 	timers.schedule(5 * 60 * 1000, this, &Application::displayCity, 30000);
@@ -160,7 +160,7 @@ void Application::displayTemperature()
 	Serial.printf("Displaying temperature - %s\n", temperature.c_str());
 
 	ledmatrix.clearDisplay();
-	ledmatrix.renderStringInCenter(temperature, 5000);
+	ledmatrix.renderStringInCenter(temperature, 3000);
 	ledmatrix.clearDisplay();
 }
 
