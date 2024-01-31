@@ -1,5 +1,4 @@
 #include "LedMatrix.h"
-#include "LedMatrixChars.h"
 
 LedMatrix::LedMatrix(int din, int clk, int cs)
 	: dataInPin(din), clkPin(clk), csPin(cs)
@@ -153,7 +152,7 @@ int LedMatrix::stringLengthInDots(const String &s) const
 			c = s[i] << 8 | s[i + 1];
 			i += 1;
 		} else {
-			c = toLowerCase(s[i]);
+			c = s[i];
 		}
 		auto info = mapping.getDotsByChar(c);
 		int charWidth = info.has_value() ? info->charWidth : 0;
@@ -170,7 +169,7 @@ void LedMatrix::renderString(const String &s, int position)
 	}
 
 	for (int i = 0; i < (int)s.length(); ++i) {
-		int c = toLowerCase(s[i]);
+		int c = s[i];
 
 		if ((c & 0xE0) == 0xC0) { // 2 bytes
 			c = s[i] << 8 | s[i + 1];
@@ -232,4 +231,6 @@ void LedMatrix::renderAllSupportedSymbols()
 	renderFloatingText("абвгдеёжзиклмнопрстуфхцчшщьыъэюя", 5000, 400);
 	clearDisplay();
 	renderFloatingText("abcdefghijklmnopqrstuvwxyz+- /°_%.↑↓", 5000, 400);
+	clearDisplay();
+	renderFloatingText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 5000, 400);
 }
