@@ -73,7 +73,7 @@ For better understanding D1 mini pins assignment:
 
 ![Build the project](images/build.png)
 
-9. After successfull build choose `Project Tasks` -> `Upload`. If device path was configured correctly on step 7, the firmware will be uploaded on the device and reboot
+9. After successfull build choose `Project Tasks` -> `Upload`. If device path was configured correctly on step 6, the firmware will be uploaded on the device and reboot
 10. At the same time you can build, upload and monitor in Terminal via `./run.sh` script
-12. The clock will be booted, connect to the confugured Wi-Fi access point, get the current time from NTP server, resolve your location, get the current weather, and finally display the time and periodically the weather details
+12. The clock will be booted, then connect to the confugured Wi-Fi access point, get the current time from NTP server, resolve your location, get the current weather, and finally display the time and periodically the weather details
 
