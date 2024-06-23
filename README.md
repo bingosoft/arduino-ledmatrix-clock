@@ -71,7 +71,7 @@ For better understanding D1 mini pins assignment:
 7. Open `Config.cpp` file and edit constants `"WIFI_SSID"` and `"WIFI_PASSWORD"`. Here you should provide wifi access point name and its password
 8. On PlatformIO tab choose `Project Tasks` -> `Build`
 
-![Build the project](images/open_project.png)
+![Build the project](images/build.png)
 
 9. After successfull build choose `Project Tasks` -> `Upload`. If device path was configured correctly on step 7, the firmware will be uploaded on the device and reboot
 10. At the same time you can build, upload and monitor in Terminal via `./run.sh` script
