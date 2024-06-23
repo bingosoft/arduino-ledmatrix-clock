@@ -170,14 +170,12 @@ namespace ledmatrix {
 	};
 
 	const static byte p[8] = {
-		B000,
-		B000,
-		B000,
-		B110,
-		B101,
-		B110,
-		B100,
-		B100,
+		0, 0, 0,
+		B1110,
+		B1001,
+		B1110,
+		B1000,
+		B1000,
 	};
 
 	const static byte q[8] = {

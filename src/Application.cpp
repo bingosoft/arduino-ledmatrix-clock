@@ -34,7 +34,7 @@ Application::Application(const App::Config &config) :
 }
 
 void Application::subscribeTimers() {
-	timers.schedule(20 * 1000, this, &Application::displayTemperature, 5000);
+	timers.schedule(15 * 1000, this, &Application::displayTemperature, 5000);
 
 	if (thermometer && thermometer->isConnected) {
 		timers.schedule(30 * 1000, this, &Application::displayTemperatureInRoom, 10000);
@@ -48,7 +48,7 @@ void Application::subscribeTimers() {
 	}
 
 	timers.schedule(5 * 60 * 1000, this, &Application::displayCity, 30000);
-	timers.schedule(60 * 1000, this, &Application::displayWind, 50000);
+	timers.schedule(120 * 1000, this, &Application::displayWind, 50000);
 	timers.schedule(config.weatherDataUpdateIntervalSeconds * 1000, &weather, &Weather::update);
 	timers.schedule(config.timeUpdateIntervalSeconds * 1000, &ntpClient, &NTPClient::getTime);
 }
