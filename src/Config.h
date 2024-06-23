@@ -14,7 +14,6 @@ namespace App {
         int csPin;
         String wifiNetwork;
         String wifiPassword;
-        String ntpServerIP;
         std::optional<String> overrideLatitude;
         std::optional<String> overrideLongitude;
 
@@ -27,8 +26,7 @@ namespace App {
             clkPin(14),
             csPin(15),
             wifiNetwork(),
-            wifiPassword(),
-            ntpServerIP()
+            wifiPassword()
         { }
     };
 }

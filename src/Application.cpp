@@ -6,7 +6,7 @@
 Application::Application(const App::Config &config) :
 	thermometer(new DHT20Thermometer()),
 	ledmatrix(config.dataInPin, config.clkPin, config.csPin),
-	ntpClient(NTPClient(config.ntpServerIP)),
+	ntpClient(NTPClient()),
 	config(config)
 {
 	Serial.println("Init app...");

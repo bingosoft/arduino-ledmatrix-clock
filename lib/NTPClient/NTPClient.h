@@ -7,22 +7,23 @@
 class NTPClient
 {
 	static const int NTP_PACKET_SIZE = 48;
+	const String ntpServerHost = "time.google.com";
 	int timeZoneSeconds;
-	String ntpServerIP;
 
+	IPAddress ntpServerIp;
 	WiFiUDP udp;
-	IPAddress ip;
 	byte packetBuffer[NTP_PACKET_SIZE];
 
 	unsigned long unixTime = 0;
 	unsigned long lastUpdated = 0;
-	void sendNTPpacket(const IPAddress &address);
+	void sendNTPpacket();
+	bool resolveNtpServerHostname();
 
 public:
-	NTPClient(String ntpServerIP);
+	NTPClient();
 
 	void setTimeZone(int seconds);
-	void getTime();
+	void getTime();	
 	int secondsSinceLastUpdate() const {
 		return (millis() - lastUpdated) / 1000;
 	}

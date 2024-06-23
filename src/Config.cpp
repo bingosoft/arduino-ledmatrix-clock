@@ -8,14 +8,13 @@ namespace App {
     static Config makeDefaultConfig() {
         Config config = Config();
 
-        static_assert(std::string_view(WIFI_SSID) != "WIFI_SSID_NAME", "Please define your WiFi SSID and password in Config.cpp:3");
-        static_assert(std::string_view(WIFI_PASSWORD) != "WIFI_PASSWORD", "Please define your WiFi SSID and password in Config.cpp:4");
+        static_assert(std::string_view(WIFI_SSID) != "WIFI_SSID_NAME", "Please define your WiFi SSID and password in Config.cpp:4");
+        static_assert(std::string_view(WIFI_PASSWORD) != "WIFI_PASSWORD", "Please define your WiFi SSID and password in Config.cpp:5");
 
         config.floatingTextMovingDelay = 30;
         config.floatingTextStartDelay = 700;
         config.wifiNetwork = WIFI_SSID;
         config.wifiPassword = WIFI_PASSWORD;
-        config.ntpServerIP = "142.132.210.78";
         config.weatherDataUpdateIntervalSeconds = 3 * 60;
         config.timeUpdateIntervalSeconds = 30 * 60;
 

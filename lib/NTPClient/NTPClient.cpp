@@ -1,21 +1,22 @@
 #include "NTPClient.h"
 #include <ESP8266WiFi.h>
 
-NTPClient::NTPClient(String ntpServerIP) :
+NTPClient::NTPClient() :
 	timeZoneSeconds(),
-	ntpServerIP(ntpServerIP) 
+	ntpServerIp()
 { }
 
 void NTPClient::getTime()
 {
 	Serial.println("Waiting for NTP sync...");
 
-	ip.fromString(ntpServerIP);
-
-	Serial.printf("Set IP for NTP server %s\n", ip.toString().c_str());
+	if (!resolveNtpServerHostname()) {
+		Serial.println("Error: NTP hostname wasn't resolved");
+		return;
+	}
 
 	udp.begin(2390);
-	sendNTPpacket(ip); // send an NTP packet to a time server
+	sendNTPpacket(); // send an NTP packet to a time server
 	// wait to see if a reply is available
 	delay(1000);
 
@@ -61,9 +62,22 @@ void NTPClient::setTimeZone(int seconds) {
 	timeZoneSeconds = seconds;
 }
 
-void NTPClient::sendNTPpacket(const IPAddress &address)
+bool NTPClient::resolveNtpServerHostname() {
+	int result = WiFi.hostByName(ntpServerHost.c_str(), ntpServerIp);
+
+	if (result == 1) {
+		Serial.printf("Resolved IP for NTP server %s - %s\n", ntpServerHost.c_str(), ntpServerIp.toString().c_str());
+		return true;
+	}
+
+	Serial.printf("A problem with resolving NTP server host %s, error code: %d", ntpServerHost.c_str(), result);
+
+	return false;
+}
+
+void NTPClient::sendNTPpacket()
 {
-	Serial.printf("Sending NTP packet for IP: %s\n", address.toString().c_str());
+	Serial.printf("Sending NTP packet for IP: %s\n", ntpServerIp.toString().c_str());
 	// set all bytes in the buffer to 0
 	memset(packetBuffer, 0, NTP_PACKET_SIZE);
 	// Initialize values needed to form NTP request
@@ -80,7 +94,7 @@ void NTPClient::sendNTPpacket(const IPAddress &address)
 
 	// all NTP fields have been given values, now
 	// you can send a packet requesting a timestamp:
-	udp.beginPacket(address, 123); //NTP requests are to port 123
+	udp.beginPacket(ntpServerIp, 123); //NTP requests are to port 123
 	udp.write(packetBuffer, NTP_PACKET_SIZE);
 	udp.endPacket();
 }
