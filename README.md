@@ -23,7 +23,7 @@ Based on [D1-mini NodeMCU ESP8266](https://www.amazon.de/-/en/dp/B08BTYHJM1) mod
 
 # How to assemble the clock
 
-1. You should order wherever (AliExpress or Amazon) a D1-mini **NodeMCU ESP8266** (optionally you can use ESP32 D1-mini as well, but it costs more expensive) and a **MAX7219 8-sections Led Matrix**
+1. You should order wherever (AliExpress or Amazon) a **D1-mini NodeMCU ESP8266** (optionally you can use ESP32 D1-mini as well, but it costs more expensive) and a **MAX7219 8-sections Led Matrix**
 2. Solder outputs using this scheme (using **SPI**):
 
 |Led Matrix Pins |Connect to|D1 Mini Pins|
@@ -43,7 +43,7 @@ Based on [D1-mini NodeMCU ESP8266](https://www.amazon.de/-/en/dp/B08BTYHJM1) mod
 |SCL|<->|D1 (SCL)|
 |SDA|<->|D2 (SDA)|
 
-I personally recommend to fix D1 mini board on the back side of ledmatrix board using either double-sided tap or hot glue gun, and additionally order [USB 5V 1A power adapter](https://www.amazon.de/-/en/dp/B0874VGP2S)
+I personally recommend to fix D1 mini board on the back side of ledmatrix board using either double-sided tap or hot glue gun, and additionally order [USB 5V 1A power adapter](https://www.amazon.de/-/en/dp/B0874VGP2S) and a long USB to microUSB cable.
 
 ### D1 Mini Pinouts:
 
