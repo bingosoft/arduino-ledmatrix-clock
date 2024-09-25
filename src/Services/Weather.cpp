@@ -23,18 +23,17 @@ void Weather::setLocation(const String &latitude, const String &longitude) {
 }
 
 void Weather::update() {
-	Serial.println("Update weather for the current location");
+	Serial.println("[Weather] Update weather for the current location");
 
 	HTTPClient http;
 	String url = "http://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&lon=" + longitude + "&appid=" + appId + "&lang=ru&units=metric";
-	Serial.println(url);
 	http.begin(_client, url);
 
 	int responseCode = http.GET();
 
 	if (responseCode == HTTP_CODE_OK) {
 		String response = http.getString();
-		Serial.println(response);
+		Serial.println("[Weather] " + response);
 
 		const size_t BUFFER_SIZE = 1024;
 		DynamicJsonBuffer jsonBuffer(BUFFER_SIZE);
@@ -42,7 +41,7 @@ void Weather::update() {
 		float newTemperature = root["main"]["temp"];
 
 		if (lastUpdate > 0) {
-			Serial.printf("Previous temperature %.1f, new - %.1f\n", _temperature, newTemperature);
+			Serial.printf("[Weather] Previous temperature %.1f, new - %.1f\n", _temperature, newTemperature);
 
 			if (newTemperature > _temperature) {
 				weatherDiffDirection = WeatherTemperatureDiffDirection::raising;
@@ -60,14 +59,14 @@ void Weather::update() {
 		_timezoneSeconds = root["timezone"];
 	 	_description = (const char *)root["weather"][0]["description"];
 		_city = (const char *)root["name"];
-		Serial.printf("Current temperature %.1f\n", _temperature);
-		Serial.println("Weather description - " + _description);
+		Serial.printf("[Weather] Current temperature %.1f\n", _temperature);
+		Serial.println("[Weather] Weather description - " + _description);
 
 		if (delegate) {
 			delegate->onWeatherUpdated();
 		}
 	} else {
-		Serial.printf("Received bad HTTP response code %d\n", responseCode);
+		Serial.printf("[Weather] Received bad HTTP response code %d\n", responseCode);
 	}
 	http.end();
 	lastUpdate = millis();

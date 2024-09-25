@@ -12,7 +12,7 @@
 
 class Application: WeatherDelegate
 {
-	IThermometer *thermometer;
+	DHT20Thermometer thermometer;
 	Weather weather;
 	GeoIP geoIP;
 	LedMatrix ledmatrix;

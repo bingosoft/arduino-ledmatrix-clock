@@ -11,7 +11,7 @@ GeoIP::GeoIP() :
 { }
 
 void GeoIP::getLocation() {
-	Serial.println("Getting current location by IP...");
+	Serial.println("[GeoIP] Getting current location by IP...");
 
 	HTTPClient http;
 	http.begin(client, "http://ip-api.com/json/");
@@ -28,7 +28,7 @@ void GeoIP::getLocation() {
 		String status = (const char *)root["status"];
 
 		if (status != "success") {
-			Serial.println("GeoIP status is not success");
+			Serial.println("[GeoIP] GeoIP status is not success");
 			http.end();
 			return;
 		}
@@ -42,10 +42,10 @@ void GeoIP::getLocation() {
 		_longitude = String(s);
 		_country = (const char *)root["country"];
 		_city = (const char *)root["city"];
-		Serial.printf("Location by IP received - Lat: %s, Lon: %s, City: %s\n", latitude.c_str(), longitude.c_str(), city.c_str());
+		Serial.printf("[GeoIP] Location by IP received - Lat: %s, Lon: %s, City: %s\n", latitude.c_str(), longitude.c_str(), city.c_str());
 		_hasLocation = true;
 	} else {
-		Serial.printf("Invalid response code from GeoIP - %d", responseCode);
+		Serial.printf("[GeoIP] Invalid response code from GeoIP - %d", responseCode);
 	}
 	http.end();
 }

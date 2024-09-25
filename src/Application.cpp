@@ -4,12 +4,12 @@
 #include "Utils/Formatter.h"
 
 Application::Application(const App::Config &config) :
-	thermometer(new DHT20Thermometer()),
+    thermometer(),
 	ledmatrix(config.dataInPin, config.clkPin, config.csPin),
-	ntpClient(NTPClient()),
+	ntpClient(),
 	config(config)
 {
-	Serial.println("Init app...");
+	Serial.println("[App] Init app...");
 
     ledmatrix.setIntensity(0);
 	connectToWiFi();
@@ -34,16 +34,19 @@ Application::Application(const App::Config &config) :
 }
 
 void Application::subscribeTimers() {
+    Serial.println("[App] Subscribing timers...");
 	timers.schedule(15 * 1000, this, &Application::displayTemperature, 5000);
 
-	if (thermometer && thermometer->isConnected) {
+	if (thermometer.isConnected) {
 		timers.schedule(30 * 1000, this, &Application::displayTemperatureInRoom, 10000);
-	}
+	} else {
+        Serial.println("[App] Room thermometer was not found. Disabling room temperature feature.");
+    }
 
 	timers.schedule(30 * 1000, this, &Application::displayDescription, 15000);
 	timers.schedule(60 * 1000, this, &Application::displayHumidity, 20000);
 
-	if (thermometer && thermometer->isConnected) {
+	if (thermometer.isConnected) {
 		timers.schedule(60 * 1000, this, &Application::displayHumidityInRoom, 35000);
 	}
 
@@ -54,7 +57,7 @@ void Application::subscribeTimers() {
 }
 
 bool Application::getTime() {
-	Serial.println("Getting time...");
+	Serial.println("[App] Getting time...");
 	ledmatrix.renderFloatingText("Getting time...", config.floatingTextStartDelay, config.floatingTextMovingDelay);
 	ledmatrix.clearDisplay();
 
@@ -80,7 +83,7 @@ bool Application::getTime() {
 }
 
 bool Application::getLocation() {
-	Serial.println("Getting location...");
+	Serial.println("[App] Getting location...");
 	ledmatrix.renderFloatingText("Getting location...", config.floatingTextStartDelay, config.floatingTextMovingDelay);
 	geoIP.getLocation();
 	
@@ -98,7 +101,7 @@ bool Application::getLocation() {
 
 void Application::connectToWiFi()
 {
-	Serial.printf("Connecting to Wi-Fi network %s, password %s\n", config.wifiNetwork.c_str(), config.wifiPassword.c_str());
+	Serial.printf("[App] Connecting to Wi-Fi network %s, password %s\n", config.wifiNetwork.c_str(), config.wifiPassword.c_str());
 
 	ledmatrix.renderFloatingText("Connecting...", config.floatingTextStartDelay, config.floatingTextMovingDelay);
 	ledmatrix.renderFloatingText(config.wifiNetwork, config.floatingTextStartDelay, config.floatingTextMovingDelay);
@@ -112,7 +115,7 @@ void Application::connectToWiFi()
 		++i;
 		Serial.print(".");
 		if (i >= 16) {
-			Serial.printf("\nNo response from access point\n");
+			Serial.printf("\n[App] No response from access point\n");
 			i = 0;
 			WiFi.disconnect();
 			WiFi.begin(config.wifiNetwork, config.wifiPassword);
@@ -121,7 +124,7 @@ void Application::connectToWiFi()
 		delay(500);
 	}
 
-	Serial.printf("\nConnected to Wi-Fi - %s\n", WiFi.localIP().toString().c_str());
+	Serial.printf("\n[App] Connected to Wi-Fi - %s\n", WiFi.localIP().toString().c_str());
 	ledmatrix.clearDisplay();
 }
 
@@ -138,7 +141,9 @@ void Application::displayTime()
 	ledmatrix.renderChar(hours % 10 + 0x30, 9);
 	ledmatrix.renderChar(minutes / 10 + 0x30, 18);
 	ledmatrix.renderChar(minutes % 10 + 0x30, 25);
-	Serial.printf("Displaying time - %02d:%02d:%02d\n", hours, minutes, seconds);
+
+    if (dotVisible)
+        Serial.printf("[App] Displaying time - %02d:%02d:%02d\n", hours, minutes, seconds);
 }
 
 void Application::displayTemperature()
@@ -157,7 +162,7 @@ void Application::displayTemperature()
 	}
 
 	String temperature = temperatureDiffSign + (weather.temperature > 0 ? "+" : weather.temperature < 0 ? "-" : "") + Formatter::format("%.1f", std::abs(weather.temperature)) + "°";
-	Serial.printf("Displaying temperature - %s\n", temperature.c_str());
+	Serial.printf("[App] Displaying temperature - %s\n", temperature.c_str());
 
 	ledmatrix.clearDisplay();
 	ledmatrix.renderStringInCenter(temperature, 3000);
@@ -166,9 +171,9 @@ void Application::displayTemperature()
 
 void Application::displayTemperatureInRoom()
 {
-	float temp = thermometer->getTemperature();
+	float temp = thermometer.getTemperature();
 	String temperature = String("внутри ") + (temp > 0 ? "+" : temp < 0 ? "-" : "") + Formatter::format("%.1f", std::abs(temp)) + "°";
-	Serial.printf("Displaying temperature in room - %s\n", temperature.c_str());
+	Serial.printf("[App] Displaying temperature in room - %s\n", temperature.c_str());
 
 	ledmatrix.clearDisplay();
 	ledmatrix.renderFloatingText(temperature, config.floatingTextStartDelay, config.floatingTextMovingDelay);
@@ -185,7 +190,7 @@ void Application::displayCity()
 
 void Application::displayDescription()
 {
-	Serial.printf("Displaying weather description %s\n", weather.description.c_str());
+	Serial.printf("[App] Displaying weather description %s\n", weather.description.c_str());
 	ledmatrix.clearDisplay();
 	ledmatrix.renderFloatingText(weather.description, config.floatingTextStartDelay, config.floatingTextMovingDelay);
 	ledmatrix.clearDisplay();
@@ -194,7 +199,7 @@ void Application::displayDescription()
 void Application::displayHumidity()
 {
 	String humidity = "влажность " + String(weather.humidity) + "%";
-	Serial.printf("Displaying humidity - %s\n", humidity.c_str());
+	Serial.printf("[App] Displaying humidity - %s\n", humidity.c_str());
 
 	ledmatrix.clearDisplay();
 	ledmatrix.renderFloatingText(humidity, config.floatingTextStartDelay, config.floatingTextMovingDelay);
@@ -203,8 +208,8 @@ void Application::displayHumidity()
 
 void Application::displayHumidityInRoom()
 {
-	String humidity = "влaжн. внутри " + String(std::lround(thermometer->getHumidity())) + "%";
-	Serial.printf("Displaying humidity inside room - %s\n", humidity.c_str());
+	String humidity = "влaжн. внутри " + String(std::lround(thermometer.getHumidity())) + "%";
+	Serial.printf("[App] Displaying humidity inside room - %s\n", humidity.c_str());
 
 	ledmatrix.clearDisplay();
 	ledmatrix.renderFloatingText(humidity, config.floatingTextStartDelay, config.floatingTextMovingDelay);
@@ -218,7 +223,7 @@ void Application::displayWind()
 	String direction = directions[index];
 	String windSpeed = Formatter::format("%.1f", weather.windSpeed);
 	String wind = "ветер " + direction + " " + windSpeed + " м/с";
-	Serial.printf("Displaying wind - %s\n", wind.c_str());
+	Serial.printf("[App] Displaying wind - %s\n", wind.c_str());
 
 	ledmatrix.clearDisplay();
 	ledmatrix.renderFloatingText(wind, config.floatingTextStartDelay, config.floatingTextMovingDelay);
@@ -238,6 +243,6 @@ void Application::exec()
 
 void Application::onWeatherUpdated()
 {
-	Serial.println("Weather updated");
+	Serial.println("[App] Weather updated");
 	ntpClient.setTimeZone(weather.timezoneSeconds);
 }

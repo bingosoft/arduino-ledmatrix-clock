@@ -8,10 +8,10 @@ NTPClient::NTPClient() :
 
 void NTPClient::getTime()
 {
-	Serial.println("Waiting for NTP sync...");
+	Serial.println("[NTP] Waiting for NTP sync...");
 
 	if (!resolveNtpServerHostname()) {
-		Serial.println("Error: NTP hostname wasn't resolved");
+		Serial.println("[NTP] Error: NTP hostname wasn't resolved");
 		return;
 	}
 
@@ -24,18 +24,18 @@ void NTPClient::getTime()
 	int retries = 10;
 
 	while (!(bytesCount = udp.parsePacket())) {
-		Serial.println("no packet yet");
+		Serial.println("[NTP] No packet yet...");
 		delay(300);
 
 		if (retries == 0) {
-			Serial.println("No answer from remote NTP server!");
+			Serial.println("[NTP] No answer from remote NTP server!");
 			udp.stop();
 			return;
 		}
 
 		retries--;
 	}
-	Serial.printf("packet received, length=%d\n", bytesCount);
+	Serial.println("[NTP] A packet received");
 	udp.read(packetBuffer, NTP_PACKET_SIZE); // read the packet into the buffer
 
 	//the timestamp starts at byte 40 of the received packet and is four bytes,
@@ -49,16 +49,16 @@ void NTPClient::getTime()
 
 	const unsigned long seventyYears = 2208988800UL;
 	unixTime = secsSince1900 - seventyYears;
-	Serial.printf("Received UNIX time from NTP server - %lu\n", unixTime);
+	Serial.printf("[NTP] Received UNIX time from NTP server - %lu\n", unixTime);
 	// print Unix time:
 	lastUpdated = millis();
 	// print the hour, minute and second:
-	Serial.printf("The current time is %02d:%02d:%02d GMT+0\n", hours(), minutes(), seconds());
+	Serial.printf("[NTP] The current time is %02d:%02d:%02d GMT+0\n", hours(), minutes(), seconds());
 	udp.stop();
 }
 
 void NTPClient::setTimeZone(int seconds) {
-	Serial.printf("Setting timezone GMT %s%d\n", seconds > 0 ? "+" : "-", seconds / 3600);
+	Serial.printf("[NTP] Setting timezone GMT %s%d\n", seconds > 0 ? "+" : "-", seconds / 3600);
 	timeZoneSeconds = seconds;
 }
 
@@ -66,18 +66,18 @@ bool NTPClient::resolveNtpServerHostname() {
 	int result = WiFi.hostByName(ntpServerHost.c_str(), ntpServerIp);
 
 	if (result == 1) {
-		Serial.printf("Resolved IP for NTP server %s - %s\n", ntpServerHost.c_str(), ntpServerIp.toString().c_str());
+		Serial.printf("[NTP] Resolved IP for NTP server %s - %s\n", ntpServerHost.c_str(), ntpServerIp.toString().c_str());
 		return true;
 	}
 
-	Serial.printf("A problem with resolving NTP server host %s, error code: %d", ntpServerHost.c_str(), result);
+	Serial.printf("[NTP] A problem with resolving NTP server host %s, error code: %d", ntpServerHost.c_str(), result);
 
 	return false;
 }
 
 void NTPClient::sendNTPpacket()
 {
-	Serial.printf("Sending NTP packet for IP: %s\n", ntpServerIp.toString().c_str());
+	Serial.printf("[NTP] Sending NTP packet for IP: %s\n", ntpServerIp.toString().c_str());
 	// set all bytes in the buffer to 0
 	memset(packetBuffer, 0, NTP_PACKET_SIZE);
 	// Initialize values needed to form NTP request
