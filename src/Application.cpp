@@ -1,6 +1,10 @@
 #include "Application.h"
-#include <ESP8266WiFi.h>
 #include "Utils/Formatter.h"
+#ifdef ARDUINO_ARCH_ESP8266
+    #include <ESP8266WiFi.h>
+#else
+    #include <WiFi.h>
+#endif
 
 Application::Application(const App::Config &config) :
     thermometer(),
@@ -181,7 +185,7 @@ void Application::displayTemperatureInRoom()
 
 void Application::displayCity()
 {
-	Serial.printf("Displaying city %s\n", weather.city.c_str());
+	Serial.printf("[App] Displaying city %s\n", weather.city.c_str());
 	ledmatrix.clearDisplay();
 	ledmatrix.renderFloatingText(weather.city, config.floatingTextStartDelay, config.floatingTextMovingDelay);
 	ledmatrix.clearDisplay();

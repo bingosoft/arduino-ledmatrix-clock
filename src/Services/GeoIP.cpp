@@ -1,6 +1,11 @@
 #include "GeoIP.h"
-#include <ESP8266HTTPClient.h>
 #include <ArduinoJson.h>
+#ifdef ARDUINO_ARCH_ESP8266
+    #include <ESP8266HTTPClient.h>
+#else
+    #include <HTTPClient.h>
+#endif
+
 
 GeoIP::GeoIP() :
 	hasLocation(_hasLocation),
@@ -16,14 +21,14 @@ void GeoIP::getLocation() {
 	HTTPClient http;
 	http.begin(client, "http://ip-api.com/json/");
 	int responseCode = http.GET();
+    String response = http.getString();
+    http.end();
 
 	if (responseCode != HTTP_CODE_OK) {
 		Serial.printf("[GeoIP] Invalid response code from GeoIP - %d", responseCode);
-        http.end();
+        return;
     }
 
-    String response = http.getString();
-    http.end();
     Serial.println("[GeoIP] Response: " + response);
 
     JsonDocument root;
