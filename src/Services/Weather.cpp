@@ -54,15 +54,20 @@ void Weather::update() {
     float newTemperature = root["main"]["temp"];
 
     if (lastUpdate > 0) {
-        Serial.printf("[Weather] Previous temperature %.1f, new - %.1f\n", _temperature, newTemperature);
+        String weatherDifference;
 
-        if (newTemperature > _temperature) {
+        if (newTemperature - _temperature >= 0.1) {
             weatherDiffDirection = WeatherTemperatureDiffDirection::raising;
-        } else if (newTemperature < _temperature) {
+            weatherDifference = "Raising";
+        } else if (newTemperature - _temperature <= -0.1) {
             weatherDiffDirection = WeatherTemperatureDiffDirection::falling;
+            weatherDifference = "Falling";
         } else {
             weatherDiffDirection = WeatherTemperatureDiffDirection::notChanged;
+            weatherDifference = "Almost the same";
         }
+
+        Serial.printf("[Weather] Previous temperature %.1f, new - %.1f. Weather difference: %s\n", _temperature, newTemperature, weatherDifference);
     }
 
     _temperature = newTemperature;
