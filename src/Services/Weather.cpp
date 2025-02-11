@@ -28,46 +28,52 @@ void Weather::update() {
 	HTTPClient http;
 	String url = "http://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&lon=" + longitude + "&appid=" + appId + "&lang=ru&units=metric";
 	http.begin(_client, url);
-
 	int responseCode = http.GET();
+    String response = http.getString();
+    http.end();
 
-	if (responseCode == HTTP_CODE_OK) {
-		String response = http.getString();
-		Serial.println("[Weather] " + response);
-
-		const size_t BUFFER_SIZE = 1024;
-		DynamicJsonBuffer jsonBuffer(BUFFER_SIZE);
-		JsonObject& root = jsonBuffer.parseObject(response);
-		float newTemperature = root["main"]["temp"];
-
-		if (lastUpdate > 0) {
-			Serial.printf("[Weather] Previous temperature %.1f, new - %.1f\n", _temperature, newTemperature);
-
-			if (newTemperature > _temperature) {
-				weatherDiffDirection = WeatherTemperatureDiffDirection::raising;
-			} else if (newTemperature < _temperature) {
-				weatherDiffDirection = WeatherTemperatureDiffDirection::falling;
-			} else {
-				weatherDiffDirection = WeatherTemperatureDiffDirection::notChanged;
-			}
-		}
-
-		_temperature = newTemperature;
-		_humidity = root["main"]["humidity"];
-		_windSpeed = root["wind"]["speed"];
-		_windDirectionAngle = root["wind"]["deg"];
-		_timezoneSeconds = root["timezone"];
-	 	_description = (const char *)root["weather"][0]["description"];
-		_city = (const char *)root["name"];
-		Serial.printf("[Weather] Current temperature %.1f\n", _temperature);
-		Serial.println("[Weather] Weather description - " + _description);
-
-		if (delegate) {
-			delegate->onWeatherUpdated();
-		}
-	} else {
+	if (responseCode != HTTP_CODE_OK) {
 		Serial.printf("[Weather] Received bad HTTP response code %d\n", responseCode);
-	}
-	http.end();
-	lastUpdate = millis();
+        return;
+    }
+
+    Serial.println("[Weather] Response: " + response);
+
+    JsonDocument root;
+    DeserializationError error = deserializeJson(root, response);
+
+    if (error) {
+        Serial.printf("[Weather] JSON deserialization error - %s\n", error.c_str());
+        return;
+    }
+
+    float newTemperature = root["main"]["temp"];
+
+    if (lastUpdate > 0) {
+        Serial.printf("[Weather] Previous temperature %.1f, new - %.1f\n", _temperature, newTemperature);
+
+        if (newTemperature > _temperature) {
+            weatherDiffDirection = WeatherTemperatureDiffDirection::raising;
+        } else if (newTemperature < _temperature) {
+            weatherDiffDirection = WeatherTemperatureDiffDirection::falling;
+        } else {
+            weatherDiffDirection = WeatherTemperatureDiffDirection::notChanged;
+        }
+    }
+
+    _temperature = newTemperature;
+    _humidity = root["main"]["humidity"];
+    _windSpeed = root["wind"]["speed"];
+    _windDirectionAngle = root["wind"]["deg"];
+    _timezoneSeconds = root["timezone"];
+    _description = (const char *)root["weather"][0]["description"];
+    _city = (const char *)root["name"];
+    Serial.printf("[Weather] Current temperature %.1f\n", _temperature);
+    Serial.println("[Weather] Weather description - " + _description);
+
+    if (delegate) {
+        delegate->onWeatherUpdated();
+    }
+
+    lastUpdate = millis();
 }

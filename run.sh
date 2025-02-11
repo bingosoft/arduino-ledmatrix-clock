@@ -3,4 +3,7 @@
 export PATH="$PATH:$HOME/.platformio/penv/bin/"
 
 platformio run -t upload;
-platformio device monitor --filter time
+
+if [ $? -eq 0 ]; then
+    platformio device monitor --filter time
+fi

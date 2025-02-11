@@ -1,5 +1,4 @@
 #include "Application.h"
-#include <NTPClient.h>
 #include <ESP8266WiFi.h>
 #include "Utils/Formatter.h"
 
@@ -15,7 +14,7 @@ Application::Application(const App::Config &config) :
 	connectToWiFi();
 
 	if (!getTime()) {
-		ESP.reset();
+        ESP.restart();
 		return;
 	}
 

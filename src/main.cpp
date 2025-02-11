@@ -9,7 +9,7 @@ void setup()
 {
 	Serial.begin(115200);
 	delay(1000);
-	a = new Application(App::Config::d1Mini);
+	a = new Application(App::Config::current);
 }
 
 void loop()

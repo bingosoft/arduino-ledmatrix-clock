@@ -26,5 +26,5 @@ namespace App {
         return config;
     }
 
-    Config Config::d1Mini = makeDefaultConfig();
+    Config Config::current = makeDefaultConfig();
 }

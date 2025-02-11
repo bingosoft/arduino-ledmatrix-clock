@@ -5,19 +5,19 @@
 
 namespace App {
     struct Config {
-        u16 weatherDataUpdateIntervalSeconds;
-        u16 timeUpdateIntervalSeconds;
-        u16 floatingTextMovingDelay;
-        u16 floatingTextStartDelay;
-        int dataInPin;
-        int clkPin;
-        int csPin;
+        uint16_t weatherDataUpdateIntervalSeconds;
+        uint16_t timeUpdateIntervalSeconds;
+        uint16_t floatingTextMovingDelay;
+        uint16_t floatingTextStartDelay;
+        uint16_t dataInPin;
+        uint16_t clkPin;
+        uint16_t csPin;
         String wifiNetwork;
         String wifiPassword;
         std::optional<String> overrideLatitude;
         std::optional<String> overrideLongitude;
 
-        static Config d1Mini;
+        static Config current;
 
         Config() :
             weatherDataUpdateIntervalSeconds(),
